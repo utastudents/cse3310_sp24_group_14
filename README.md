@@ -5,7 +5,7 @@
 % mvn clean
 % mvn compile
 % mvn package
-% mvn exec:java -Dexec.mainClass=uta.cse3310.App
+% mvn exec:java -Dexec.mainClass=uta.cse3310.GameSession
 ```
 Information on deployment:
 
