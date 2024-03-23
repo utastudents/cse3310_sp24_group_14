@@ -1,6 +1,5 @@
 // Name: Tien Dat Do
 // Date: March 21, 2024
-// TheWordSearchGame Player class
 
 // package Group-14;
 package uta.cse3310;

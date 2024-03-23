@@ -1,4 +1,4 @@
-# TicTacToe
+# TheWordSearchGame
 
 ```bash
 % export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.18.0.9-0.3.ea.el8.x86_64
