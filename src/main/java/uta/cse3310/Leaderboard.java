@@ -1,33 +1,26 @@
-// Name: Uriel Lujan
-// Date: March 17, 2024
-// TheWordSearchGame Leaderboard class
 
-// package Group-14;
 
 package uta.cse3310;
 
-import java.util.ArrayList;
-import java.util.Map;
-// import javax.swing.text.Position;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Leaderboard
-{
-    public Map<String, ArrayList<Position>> example;
+public class Leaderboard {
+    private Map<String, Integer> scores;
 
-    private Map playerScores()
-    {
-        return example;
+    public Leaderboard() {
+        this.scores = new HashMap<>();
     }
 
-    public void updateLeaderboard(Player player, int score)
-    {
-
+    public void updateScore(String playerName, int score) {
+        scores.put(playerName, score);
     }
 
-    public ArrayList<Player> displayLeaderboard()
-    {
-        ArrayList<Player> placeholder = new ArrayList<>();
-        return placeholder;
+    public int getScore(String playerName) {
+        return scores.getOrDefault(playerName, 0);
+    }
+
+    public Map<String, Integer> getAllScores() {
+        return scores;
     }
 }
