@@ -2,21 +2,22 @@
 // Date: March 21, 2024
 // TheWordSearchGame Player class
 
-// package Group-14;
 package uta.cse3310;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
     private String nick;
     private int score;
     private List<String> wordsFound;
+    public ArrayList<Message> messages = new ArrayList<>();
 
-    public Player(String nick, int score, List<String> wordsFound) {
+    public Player(String nick, int score, List<String> wordsFound, ArrayList<Message> messages) {
         this.nick = nick;
         this.score = score;
         this.wordsFound = wordsFound;
+        this.messages = messages;
     }
 
     public String getNick() {
@@ -43,6 +44,22 @@ public class Player {
         this.wordsFound = wordsFound;
     }
 
+    public ArrayList<Message> getMessages(){
+        return messages;
+    }
+
+    public void setMessages(ArrayList<Message> messages){
+        this.messages = messages;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "nick = " + getNick() +
+                
+                '}';
+    }
+
     public class Position {
        
     }
@@ -55,6 +72,5 @@ public class Player {
     public void selectWordEnd(Position position) {
         
     }
+    
 }
-
-
