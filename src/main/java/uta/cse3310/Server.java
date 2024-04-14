@@ -2,8 +2,7 @@
 // Date: March 17, 2024
 // TheWordSearchGame Server class
 
-// package Group-14;
-package Group14;
+package uta.cse3310;
 
 import java.util.ArrayList;
 
