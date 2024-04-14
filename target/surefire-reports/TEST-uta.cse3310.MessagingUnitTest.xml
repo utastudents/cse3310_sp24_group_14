@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="uta.cse3310.MessagingUnitTest" time="0.038" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="uta.cse3310.MessagingUnitTest" time="0.027" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
     <property name="java.specification.version" value="11"/>
@@ -14,7 +14,7 @@
     <property name="os.name" value="Linux"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/surefire/surefirebooter15544503069744972298.jar /mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/surefire 2024-04-14T11-31-07_747-jvmRun1 surefire6470082652404176012tmp surefire_013035681782109967509tmp"/>
+    <property name="sun.java.command" value="/mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/surefire/surefirebooter18001918693721401209.jar /mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/surefire 2024-04-14T11-42-56_396-jvmRun1 surefire17495150282612654514tmp surefire_09011188305159403416tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/test-classes:/mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/classes:/root/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/root/.m2/repository/com/google/code/gson/gson/2.9.1/gson-2.9.1.jar:/root/.m2/repository/net/freeutils/jlhttp/2.6/jlhttp-2.6.jar:/root/.m2/repository/org/java-websocket/Java-WebSocket/1.5.4/Java-WebSocket-1.5.4.jar:/root/.m2/repository/org/slf4j/slf4j-api/2.0.6/slf4j-api-2.0.6.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/surefire/surefirebooter15544503069744972298.jar"/>
+    <property name="surefire.real.class.path" value="/mnt/c/Users/Sabin Mandal/Desktop/git/cse3310_sp24_group_14/target/surefire/surefirebooter18001918693721401209.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.22+7-post-Ubuntu-0ubuntu222.04.1"/>
     <property name="user.name" value="root"/>
@@ -56,5 +56,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="testMessaging" classname="uta.cse3310.MessagingUnitTest" time="0.036"/>
+  <testcase name="testMessaging" classname="uta.cse3310.MessagingUnitTest" time="0.026"/>
 </testsuite>

@@ -15,7 +15,7 @@ public class LobbyTest extends TestCase {
 
     public void testLobby() {
         // Create lobby
-        lobby lobby = new lobby();
+        Lobby lobby = new Lobby();
 
         // Test adding players
         assertTrue(lobby.addPlayer("Player 1"));
