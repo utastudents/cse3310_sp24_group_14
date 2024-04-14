@@ -14,6 +14,7 @@ public class LeaderboardTest extends TestCase {
     public static Test suite() {
         return new TestSuite(LeaderboardTest.class);
     }
+    
 
     public void testLeaderboard() {
         // Create leaderboard

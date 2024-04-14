@@ -2,7 +2,6 @@ package uta.cse3310;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import java.util.List;
 import java.util.ArrayList;
 
 public class lobbytest extends TestCase {
@@ -25,7 +24,7 @@ public class lobbytest extends TestCase {
 
         // Test removing players
         lobby.removePlayer("Player 1");
-        List<String> players = lobby.getPlayers();
+        ArrayList<String> players = new ArrayList<>(lobby.getPlayers());
         assertFalse(players.contains("Player 1"));
         assertTrue(players.contains("Player 2"));
 
@@ -46,4 +45,5 @@ public class lobbytest extends TestCase {
         System.out.println("----------------TESTING COMPLETE-----------------");
     }
 }
+
 
