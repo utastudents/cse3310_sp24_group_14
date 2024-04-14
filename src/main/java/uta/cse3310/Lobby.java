@@ -2,12 +2,12 @@ package uta.cse3310;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lobby {
+public class lobby {
     private List<String> players;
     private static final int MAX_PLAYERS = 2; // Maximum players allowed in the lobby
     private boolean gameStarted;
 
-    public Lobby() {
+    public lobby() {
         this.players = new ArrayList<>();
         this.gameStarted = false;
     }

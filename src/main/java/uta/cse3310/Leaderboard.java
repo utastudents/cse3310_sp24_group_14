@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Leaderboard {
-    private Map<String, Integer> scores;
+    private Map<String, Integer> scores; 
 
     public Leaderboard() {
         this.scores = new HashMap<>();

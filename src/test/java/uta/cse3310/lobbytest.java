@@ -4,18 +4,18 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import java.util.ArrayList;
 
-public class lobbytest extends TestCase {
-    public lobbytest(String testName) {
+public class LobbyTest extends TestCase {
+    public LobbyTest(String testName) {
         super(testName);
     }
 
     public static Test suite() {
-        return new TestSuite(lobbytest.class);
+        return new TestSuite(LobbyTest.class);
     }
 
     public void testLobby() {
         // Create lobby
-        Lobby lobby = new Lobby();
+        lobby lobby = new lobby();
 
         // Test adding players
         assertTrue(lobby.addPlayer("Player 1"));
