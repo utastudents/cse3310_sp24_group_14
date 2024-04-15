@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Lobby {
     private List<String> players;
-    private static final int MAX_PLAYERS = 2; // Maximum players allowed in the lobby
+    private static final int MAX_PLAYERS = 4; // Maximum players allowed in the lobby
     private boolean gameStarted;
 
     public Lobby() {
