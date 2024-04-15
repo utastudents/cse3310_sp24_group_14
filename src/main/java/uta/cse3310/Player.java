@@ -46,6 +46,11 @@ public class Player {
                 
                 '}';
     }
+	 
+	//Added by Tien
+    	public void displayScore(int score) {
+        System.out.println("Score: " + score);
+    	}
 	
 	//new getters & setters
 	public Color getMarkColor(){
