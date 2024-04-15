@@ -1,44 +1,40 @@
-// Name: Uriel Lujan
-// Date: March 17, 2024
-// TheWordSearchGame Lobby class
-
-// package Group-14;
-
 package uta.cse3310;
-
-
 import java.util.ArrayList;
+import java.util.List;
 
-public class Lobby
-{
-    private ArrayList<Player> waitingPlayers = new ArrayList<>();
+public class Lobby {
+    private List<String> players;
+    private static final int MAX_PLAYERS = 4; // Maximum players allowed in the lobby
+    private boolean gameStarted;
 
-    // public Lobby()
-    // {
-    
-    // }
-    
-    public void addPlayerToLobby(Player player)
-    {
-        waitingPlayers.add(player);
+    public Lobby() {
+        this.players = new ArrayList<>();
+        this.gameStarted = false;
     }
 
-    public void removePlayerFromLobby(Player player)
-    {
-        waitingPlayers.remove(player);
-    }
 
-    public void displayWaitingPlayers() // return type suggested returning 'Player' object but void is better
-    {
-        for(Player element : waitingPlayers)
-        {
-            System.out.println(element);
+    public boolean addPlayer(String playerName) {
+        if (players.size() < MAX_PLAYERS) {
+            players.add(playerName);
+            return true;
+        } else {
+            return false; // Lobby is full
         }
     }
 
-    public GameSession startGameForPlayers(ArrayList<Player> players)
-    {
-        GameSession newGame = new GameSession();
-        return newGame;
+    public void removePlayer(String playerName) {
+        players.remove(playerName);
+    }
+
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
+    public void setGameStarted(boolean gameStarted) {
+        this.gameStarted = gameStarted;
     }
 }

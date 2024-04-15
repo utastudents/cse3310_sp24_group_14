@@ -1,47 +1,34 @@
-// Name: Tien Dat Do
-// Date: March 21, 2024
-// TheWordSearchGame Player class
-
 package uta.cse3310;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Color;
+import java.util.Random;
 
 public class Player {
     private String nick;
     private int score;
     private List<String> wordsFound;
+	private Color markColor;                     //player's unique highlighting color
+	private ArrayList<Position> markCells;  //current word player is highlighting
     public ArrayList<Message> messages = new ArrayList<>();
 
-    public Player(String nick, int score, List<String> wordsFound, ArrayList<Message> messages) {
+    public Player(String nick, int score, List<String> wordsFound, Color highlightColor, ArrayList<Message> messages) {
         this.nick = nick;
         this.score = score;
         this.wordsFound = wordsFound;
+		this.markColor = randomColor(); //color to highlight in for player
+		this.markCells = new ArrayList<>();  //each time a player will highlight something new
         this.messages = messages;
     }
-
+    
+	//original getters and setters from design
     public String getNick() {
         return nick;
     }
 
     public void setNick(String nick) {
         this.nick = nick;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public List<String> getWordsFound() {
-        return wordsFound;
-    }
-
-    public void setWordsFound(List<String> wordsFound) {
-        this.wordsFound = wordsFound;
     }
 
     public ArrayList<Message> getMessages(){
@@ -59,18 +46,70 @@ public class Player {
                 
                 '}';
     }
+	 
+	//Added by Tien
+    	public void displayScore(int score) {
+        System.out.println("Score: " + score);
+    	}
+	
+	//new getters & setters
+	public Color getMarkColor(){
+		return markColor;
+	}
+	
+	public void setMarkColor(Color markColor){
+		this.markColor = markColor;
+	}
 
-    public class Position {
-       
-    }
 
     // Methods
     public void selectWordStart(Position position) {
+		int row = position.getX();
+        int col = position.getY();
+		markCells.clear();         //unhighlights remaining words
+		markCells.add(new Position(row,col));
         
     }
+	//added new method to highlight words inbetween first and last letter
+	public void continueSelectWord(Position position){
+		int row = position.getX();
+        int col = position.getY();
+		markCells.add(new Position(row,col));
+	}
 
     public void selectWordEnd(Position position) {
-        
+        int row = position.getX();
+        int col = position.getY();
+		markCells.add(new Position(row,col));
+		String word = getMarkedWord(); //creates a word from all selected cells
+		if (wordsFound.contains(word) && !prevFound(word)){
+			score += 10;
+			wordsFound.add(word);
+		}
+		else {
+			markCells.clear(); //erases highlight from word if it's not one from game
+		}
     }
+	
+	private String getMarkedWord(){
+		StringBuilder makeWord = new StringBuilder();
+		for (Position position : markCells){
+			int row = position.getX();
+			int col = position.getY();
+			makeWord.append(WordGrid.getLetterAt(row,col));
+		}
+		return makeWord.toString();
+	}
+	
+	private boolean prevFound(String word){ //checks if word's already been found
+		return wordsFound.contains(word);
+	}
     
+	private Color randomColor(){
+		int yellow = (int) (Math.random() * 256);
+		int blue = (int) (Math.random() * 256);
+		int red = (int) (Math.random() * 256);
+		
+		return new Color(yellow, blue, red);
+	}
 }
