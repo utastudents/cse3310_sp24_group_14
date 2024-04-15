@@ -16,6 +16,7 @@ public class WordGrid {
      //Added by Tien
     public void highlightLetter(Position position, Player player) {
         // Implement the logic to highlight a letter in the grid for a player
+        // Cannot be implemented within Java
         // For example:
         // int row = position.getX();
         // int col = position.getY();
