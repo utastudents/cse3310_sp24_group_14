@@ -12,8 +12,15 @@ public class WordGrid {
     char[][] grid;
     ArrayList<String> wordsInGrid = new ArrayList<String>();
     Map<String, ArrayList<Position>> wordPositions = new HashMap<String, ArrayList<Position>>();
-
-
+    
+     //Added by Tien
+    public void highlightLetter(Position position, Player player) {
+        // Implement the logic to highlight a letter in the grid for a player
+        // For example:
+        // int row = position.getX();
+        // int col = position.getY();
+        // grid[row][col] = '*'; // Highlight the letter at the specified position
+    }
 
     public WordGrid(int size, ArrayList<String> words) {
 
