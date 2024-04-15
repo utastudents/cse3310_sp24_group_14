@@ -128,7 +128,7 @@ public class GameSession {
 
     public void showWinner(Player winner) {
         // Display the winner of the game session
-        System.out.println("Winner: " + winner.getName());
+        System.out.println("Winner: " + winner.getNick());
     }
 
     public void displayPlayerScores() {
