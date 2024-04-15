@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameSession {
     public WordGrid wordGrid;
@@ -138,6 +139,19 @@ public class GameSession {
             player.displayScore(score);
         }
     }
+
+    public class GameEndTask extends TimerTask {
+    private GameSession gameSession;
+
+    public GameEndTask(GameSession gameSession) {
+        this.gameSession = gameSession;
+    }
+
+    @Override
+    public void run() {
+        gameSession.endGame();
+    }
+}
 
     public static void main(String args[]) {
         GameSession gameSession = new GameSession();
