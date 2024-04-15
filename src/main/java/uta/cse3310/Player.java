@@ -7,18 +7,18 @@ import java.util.Random;
 
 public class Player {
     private String nick;
-    private int score;
+    private int score;                        //add score based off words found (method in wordgrid)
     private List<String> wordsFound;
-	private Color markColor;                     //player's unique highlighting color
-	private ArrayList<Position> markCells;  //current word player is highlighting
+    //private Color markColor;                //player's unique highlighting color
+    //private ArrayList<Position> markCells;  //current word player is highlighting
     public ArrayList<Message> messages = new ArrayList<>();
 
-    public Player(String nick, int score, List<String> wordsFound, Color highlightColor, ArrayList<Message> messages) {
+    public Player(String nick, int score, List<String> wordsFound, Color markColor, ArrayList<Message> messages) {
         this.nick = nick;
         this.score = score;
         this.wordsFound = wordsFound;
-		this.markColor = randomColor(); //color to highlight in for player
-		this.markCells = new ArrayList<>();  //each time a player will highlight something new
+	//this.markColor = randomColor(); //color to highlight in for player
+	//this.markCells = new ArrayList<>();  //each time a player will highlight something new
         this.messages = messages;
     }
     
@@ -61,7 +61,7 @@ public class Player {
 		this.markColor = markColor;
 	}
 
-
+/*  Implemented in WordGrid instead
     // Methods
     public void selectWordStart(Position position) {
 		int row = position.getX();
@@ -112,4 +112,5 @@ public class Player {
 		
 		return new Color(yellow, blue, red);
 	}
+	*/
 }
