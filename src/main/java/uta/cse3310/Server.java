@@ -30,17 +30,17 @@ public class Server {
     private void assignClientToSession(Client client) {
         // Logic to assign a client to an existing game session or create a new one
         for (GameSession session : gameSessions) {
-            if (!session.isFull()) {
-                session.addPlayer(client.getPlayer());
-                client.setCurrentSession(session);
-                System.out.println("Player " + client.getPlayer().getNick() + " added to existing session.");
-                return;
-            }
+            // if (!session.isFull()) {
+            //     session.addPlayer(client.getPlayer());
+            //     client.setCurrentSession(session);
+            //     System.out.println("Player " + client.getPlayer().getNick() + " added to existing session.");
+            //     return;
+            // }
         }
 
         // Create new session if no available session
         GameSession newSession = createGameSession(new ArrayList<>());
-        newSession.addPlayer(client.getPlayer());
+    //    newSession.addPlayer(client.getPlayer());
         client.setCurrentSession(newSession);
         gameSessions.add(newSession);
         System.out.println("New session created and player added: " + client.getPlayer().getNick());
@@ -49,7 +49,7 @@ public class Server {
     public GameSession createGameSession(ArrayList<Player> players) {
         GameSession newGame = new GameSession();
         for (Player player : players) {
-            newGame.addPlayer(player);
+        //    newGame.addPlayer(player);
         }
         return newGame;
     }

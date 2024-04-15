@@ -96,7 +96,7 @@ public class Player {
 		for (Position position : markCells){
 			int row = position.getX();
 			int col = position.getY();
-			makeWord.append(WordGrid.getLetterAt(row,col));
+		//	makeWord.append(WordGrid.getLetterAt(row,col));
 		}
 		return makeWord.toString();
 	}

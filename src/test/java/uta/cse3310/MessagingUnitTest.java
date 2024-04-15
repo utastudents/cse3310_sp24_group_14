@@ -25,8 +25,8 @@ public class MessagingUnitTest extends TestCase{
         ArrayList<Message> p1 = new ArrayList<>();
         ArrayList<Message> p2 = new ArrayList<>();
 
-        Player player1 = new Player("John Doe", 0, null, p1);
-        Player player2 = new Player("Jane Doe", 0, null, p2);
+        Player player1 = new Player("John Doe", 0, null, null, p1);
+        Player player2 = new Player("Jane Doe", 0, null, null, p2);
 
         players.add(player1);
         players.add(player2);
