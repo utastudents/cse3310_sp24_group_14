@@ -13,15 +13,15 @@ public class WordGrid {
     ArrayList<String> wordsInGrid = new ArrayList<String>();
     Map<String, ArrayList<Position>> wordPositions = new HashMap<String, ArrayList<Position>>();
     
-     //Added by Tien
-    public void highlightLetter(Position position, Player player) {
+     //Added by Tien 4/14/24
+    /*public void highlightLetter(Position position, Player player) {
         // Implement the logic to highlight a letter in the grid for a player
-        // Cannot be implemented within Java
+        // Comment by Anthony: "Cannot be implemented within Java, done by HTML side"
         // For example:
         // int row = position.getX();
         // int col = position.getY();
         // grid[row][col] = '*'; // Highlight the letter at the specified position
-    }
+    }*/
 
     public WordGrid(int size, ArrayList<String> words) {
 
@@ -416,8 +416,9 @@ public class WordGrid {
         return word;
     }
 
-    public void highlightWord(String word) {
+   /* public void highlightWord(String word) {
         //highlights the word within the grid 
+        //Structure that can be used, cannot be implemented on Java side
 
         //if the word isn't in the grid notify and return
         if (!(wordsInGrid.contains(word))) {
@@ -436,7 +437,7 @@ public class WordGrid {
                 grid[i][j] = '*';
             }
         }
-    }
+    }*/
 
     public boolean isWordPlaced(String word) {
 
