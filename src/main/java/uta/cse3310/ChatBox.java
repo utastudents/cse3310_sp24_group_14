@@ -36,3 +36,4 @@ public class ChatBox {
             return message; // Implement your censoring logic here
         }
 }
+}
