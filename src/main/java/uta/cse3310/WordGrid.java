@@ -416,7 +416,14 @@ public class WordGrid {
     }
 
     public void highlightWord(String word) {
-        // Implementation
+        //highlights the word within the grid 
+
+        //if the word isn't in the grid notify and return
+        if (!(wordsInGrid.contains(word))) {
+            System.out.println("Word Not in Grid");
+            return;
+        }
+
         ArrayList<Position> startend = wordPositions.get(word);
         Position start = startend.get(0);
         Position end = startend.get(1);
