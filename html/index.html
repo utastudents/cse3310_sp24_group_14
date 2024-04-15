@@ -4,6 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TheWordSearchGame</title>
+</head>
+<body>
+
+<h1>TheWordSearchGame</h1>
+
+<div id="wordGrid"></div>
+
+<label id="topMessage"></label>
+
+<script>
+    var connection = null;
+
+    var serverUrl;
+    serverUrl = "ws://" + window.location.hostname + ":" + (parseInt(location.port) + 100);
+    connection = new WebSocket(serverUrl);
+
+    connection.onopen = function (evt) {
+        console.log("open");
+    }
+
+    connection.onclose = function (evt) {
+        console.log("close");
+        document.getElementById("topMessage").innerHTML = "Server Offline"
+    }
+
+    connection.onmessage = function (evt) {
+        var msg = evt.data;
+        console.log("Message received: " + msg);
+        const obj = JSON.parse(msg);
+
+        if ('WordGrid' in obj) {
+            // Render the word grid
+            renderWordGrid(obj.WordGrid);
+        } else if ('Message' in obj) {
+            document.getElementById("topMessage").innerHTML = obj.Message;
+        }
+    }
+
+    function renderWordGrid(wordGrid) {
+        var gridHtml = "<table>";
+        for (var i = 0; i < wordGrid.length; i++) {
+            gridHtml += "<tr>";
+            for (var j = 0; j < wordGrid[i].length; j++) {
+                gridHtml += "<td><button id='b" + (i * wordGrid.length + j) + "' onclick='buttonClick(" + i + "," + j + ")'>" + wordGrid[i][j] + "</button></td>";
+            }
+            gridHtml += "</tr>";
+        }
+        gridHtml += "</table>";
+        document.getElementById("wordGrid").innerHTML = gridHtml;
+    }
+
+    function buttonClick(row, col) {
+        var position = { "row": row, "col": col };
+        connection.send(JSON.stringify(position));
+    }
+</script>
 
 </body>
 </html>
