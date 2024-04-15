@@ -102,7 +102,7 @@ public class GameSession {
 
     public void censorMessage(String message) {
         // Placeholder logic: Censor inappropriate words in the message
-        String censoredMessage = WordFilter.censor(message);
+        String censoredMessage = chatBox.censor(message);
         sendMessageToAllPlayers(censoredMessage);
     }
 
