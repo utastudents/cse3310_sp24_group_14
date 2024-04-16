@@ -32,7 +32,6 @@ public class Client {
     // Sends a word input from the player to the server or game session
     public void sendInput(String word) {
         if (currentSession != null) {
-            // Example method calls to get positions
             Position startPos = determineStartPosition(word);
             Position endPos = determineEndPosition(word);
 
