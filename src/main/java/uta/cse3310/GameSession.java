@@ -16,19 +16,19 @@ public class GameSession {
     private ChatBox chatBox;
 
     public void startGame() {
-    //    wordGrid = selectWordGrid();
+        wordGrid = selectWordGrid();
         players = new ArrayList<>();
         chatBox = new ChatBox();
         // Initialize the timer for the game session (assuming a default duration of 10 minutes)
         startTimer(600);
     }
 
-    // private WordGrid selectWordGrid() {
-    //     int testGridIndex = Integer.parseInt(System.getenv("TEST_GRID"));
-    //     // Placeholder logic: Select a word grid based on the test grid index
-    //     WordGrid selectedGrid = WordGrid.selectGrid(testGridIndex);
-    //     return selectedGrid;
-    // }
+     private WordGrid selectWordGrid() {
+         int testGridIndex = Integer.parseInt(System.getenv("TEST_GRID"));
+         // Placeholder logic: Select a word grid based on the test grid index
+         WordGrid selectedGrid = WordGrid.selectGrid(testGridIndex);
+         return selectedGrid;
+     }
 
     public void endGame() {
         stopTimer();
@@ -49,10 +49,10 @@ public class GameSession {
         return winner;
     }
 
-    // public boolean validateWordSelection(Position startPos, Position endPos) {
-    //     // Placeholder logic: Check if the selected positions form a valid word on the grid
-    //     return wordGrid.isValidWord(startPos, endPos);
-    // }
+     public boolean validateWordSelection(Position startPos, Position endPos) {
+         // Placeholder logic: Check if the selected positions form a valid word on the grid
+         return wordGrid.isValidWord(startPos, endPos);
+     }
 
     public void updateScores(Player player, int score) {
         scores.put(player, scores.getOrDefault(player, 0) + score);
@@ -102,8 +102,8 @@ public class GameSession {
 
     public void censorMessage(String message) {
         // Placeholder logic: Censor inappropriate words in the message
-    //    String censoredMessage = chatBox.censor(message);
-    //    sendMessageToAllPlayers(censoredMessage);
+        String censoredMessage = chatBox.censor(message);
+        sendMessageToAllPlayers(censoredMessage);
     }
 
     public void collapseChatBox() {
@@ -121,10 +121,10 @@ public class GameSession {
         wordGrid.highlightLetter(position, player);
     }
 
-    // public void highlightWord(Position startPos, Position endPos, Player player) {
-    //     // Placeholder logic: Highlight a word in the grid for a player
-    //     wordGrid.highlightWord(startPos, endPos, player);
-    // }
+     public void highlightWord(Position startPos, Position endPos, Player player) {
+         // Placeholder logic: Highlight a word in the grid for a player
+         wordGrid.highlightWord(startPos, endPos, player);
+     }
 
     public void showWinner(Player winner) {
         // Display the winner of the game session
