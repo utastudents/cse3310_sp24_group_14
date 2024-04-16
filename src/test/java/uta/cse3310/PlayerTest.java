@@ -1,4 +1,5 @@
-package uta.cse3310;
+//NEED TO DELETE, no methods in player.java anymore, all moved to other classes
+/*package uta.cse3310;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -77,4 +78,4 @@ public class PlayerTest extends TestCase{
 	
 	
 
-}
+}*/
