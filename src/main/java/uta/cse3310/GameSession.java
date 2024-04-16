@@ -49,6 +49,11 @@ public class GameSession {
         return winner;
     }
 
+    public boolean isFull(){
+        // TODO: return if session is full
+        return true;
+    }
+
      public boolean validateWordSelection(Position startPos, Position endPos) {
          // Placeholder logic: Check if the selected positions form a valid word on the grid
          return wordGrid.isValidWord(startPos, endPos);

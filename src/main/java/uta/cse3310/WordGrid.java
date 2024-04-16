@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.random.*;
 
 public class WordGrid {
     char[][] grid;
