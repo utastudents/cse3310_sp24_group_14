@@ -1,56 +1,39 @@
 package uta.cse3310;
 
-// import org.junit.Before;
-// import org.junit.Test;
-// import org.mockito.Mockito;
+import junit.framework.TestCase;
 
-import java.util.ArrayList;
-
-// import static org.junit.Assert.*;
-// import static org.mockito.Mockito.*;
-
-public class ServerTest {
+public class ServerTest extends TestCase {
     private Server server;
-    private Client mockClient;
-    private Player mockPlayer;
 
-//    @Before
-    // public void setUp() {
-    //     server = new Server();
-    //     mockClient = mock(Client.class);
-    //     mockPlayer = mock(Player.class);
-    //     when(mockClient.getPlayer()).thenReturn(mockPlayer);
-    //     when(mockPlayer.getNick()).thenReturn("TestPlayer");
-    // }
-
-//    @Test
-    public void testHandleConnection() {
-        // server.handleConnection(mockClient);
-        // assertNotNull(server.getCurrentSessionForPlayer(mockPlayer));
-        // assertEquals("Server should have exactly one client online after connection", 1, server.getClientsOnline().size());
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        server = new TestableServer(new InetSocketAddress(8080));
     }
 
-//    @Test
-    public void testCreateGameSession() {
-        ArrayList<Player> players = new ArrayList<>();
-        players.add(mockPlayer);
-        //GameSession session = server.createGameSession(players);
-        // assertNotNull("Game session should be created", session);
-        // assertTrue("Game session should contain the player", session.getPlayers().contains(mockPlayer));
+    public void testOnOpenAddsClient() {
+        // Simulate opening a connection (mocking manually)
+        WebSocket fakeWebSocket = new FakeWebSocket();
+        server.onOpen(fakeWebSocket, null);
+
+        // Assert conditions
+        assertEquals(1, server.clientsOnline.size());
+        assertNotNull(server.clientsOnline.get(fakeWebSocket));
+        System.out.println("Test OnOpen: New client should be added.");
     }
 
-//    @Test
-    public void testBroadcastMessage() {
-    //    server.handleConnection(mockClient);
-    //    server.broadcastMessage("Hello, world!");
-    //    verify(mockClient, times(1)).sendInput("Hello, world!");
+    private static class TestableServer extends Server {
+        public TestableServer(InetSocketAddress address) {
+            super(address);
+        }
+
+        @Override
+        protected Client createClient(WebSocket conn) {
+            return new Client(new Player("TestPlayer"), null);
+        }
     }
 
-//    @Test
-    public void testEndServer() {
-        // server.handleConnection(mockClient);
-        // server.endServer();
-        // assertTrue("Server should have no clients online after shutdown", server.getClientsOnline().isEmpty());
-        // assertTrue("Server should have no game sessions after shutdown", server.getGameSessions().isEmpty());
+    private static class FakeWebSocket implements WebSocket {
+        // Implement necessary methods as no-op or minimal functionality
     }
 }
