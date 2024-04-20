@@ -6,10 +6,10 @@ import java.awt.Color;
 import java.util.Random;
 
 public class Player {
-    private String nick;
-    private List<String> wordsFound;
-	private Color markColor;                //player's unique highlighting color
-    //private ArrayList<Position> markCells;  //current word player is highlighting
+    public String nick;
+    public List<String> wordsFound;
+    public Color markColor;                //player's unique highlighting color
+    //private ArrayList<Position> markCells;  //current word player is highlighting, will be implemented in html; can't do in java
     public ArrayList<Message> messages;
 
 
@@ -61,56 +61,7 @@ public class Player {
 		this.markColor = markColor;
 	}
 
-/*  Implemented in WordGrid instead
-    // Methods
-    public void selectWordStart(Position position) {
-		int row = position.getX();
-        int col = position.getY();
-		markCells.clear();         //unhighlights remaining words
-		markCells.add(new Position(row,col));
-        
-    }
-	//added new method to highlight words inbetween first and last letter
-	public void continueSelectWord(Position position){
-		int row = position.getX();
-        int col = position.getY();
-		markCells.add(new Position(row,col));
-	}
-
-    public void selectWordEnd(Position position) {
-        int row = position.getX();
-        int col = position.getY();
-		markCells.add(new Position(row,col));
-		String word = getMarkedWord(); //creates a word from all selected cells
-		if (wordsFound.contains(word) && !prevFound(word)){
-			score += 10;
-			wordsFound.add(word);
-		}
-		else {
-			markCells.clear(); //erases highlight from word if it's not one from game
-		}
-    }
-	
-	private String getMarkedWord(){
-		StringBuilder makeWord = new StringBuilder();
-		for (Position position : markCells){
-			int row = position.getX();
-			int col = position.getY();
-		//	makeWord.append(WordGrid.getLetterAt(row,col));
-		}
-		return makeWord.toString();
-	}
-	
-	private boolean prevFound(String word){ //checks if word's already been found
-		return wordsFound.contains(word);
-	}
-    
-	private Color randomColor(){
-		int yellow = (int) (Math.random() * 256);
-		int blue = (int) (Math.random() * 256);
-		int red = (int) (Math.random() * 256);
-		
-		return new Color(yellow, blue, red);
-	}
-	*/
+/*  
+    Methods moved to word grid
+*/
 }
