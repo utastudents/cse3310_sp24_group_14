@@ -4,6 +4,7 @@ package uta.cse3310;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,19 +17,19 @@ public class GameSession {
     private ChatBox chatBox;
 
     public void startGame() {
-        wordGrid = selectWordGrid();
+        // wordGrid = selectWordGrid();
         players = new ArrayList<>();
         chatBox = new ChatBox();
         // Initialize the timer for the game session (assuming a default duration of 10 minutes)
         startTimer(600);
     }
 
-     private WordGrid selectWordGrid() {
-         int testGridIndex = Integer.parseInt(System.getenv("TEST_GRID"));
-         // Placeholder logic: Select a word grid based on the test grid index
-         WordGrid selectedGrid = WordGrid.selectGrid(testGridIndex);
-         return selectedGrid;
-     }
+    //  private WordGrid selectWordGrid() { // commented out because it is causing maven to crash please fix
+    //      int testGridIndex = Integer.parseInt(System.getenv("TEST_GRID"));
+    //      // Placeholder logic: Select a word grid based on the test grid index
+    //      WordGrid selectedGrid = WordGrid.selectGrid(testGridIndex);
+    //      return selectedGrid;
+    //  }
 
     public void endGame() {
         stopTimer();
@@ -54,10 +55,10 @@ public class GameSession {
         return true;
     }
 
-     public boolean validateWordSelection(Position startPos, Position endPos) {
-         // Placeholder logic: Check if the selected positions form a valid word on the grid
-         return wordGrid.isValidWord(startPos, endPos);
-     }
+    //  public boolean validateWordSelection(Position startPos, Position endPos) { // causing maven to crash please fix
+    //      // Placeholder logic: Check if the selected positions form a valid word on the grid
+    //      return wordGrid.isValidWord(startPos, endPos);
+    //  }
 
     public void updateScores(Player player, int score) {
         scores.put(player, scores.getOrDefault(player, 0) + score);
@@ -105,11 +106,11 @@ public class GameSession {
         chatBox.displayHistory(player);
     }
 
-    public void censorMessage(String message) {
-        // Placeholder logic: Censor inappropriate words in the message
-        String censoredMessage = chatBox.censor(message);
-        sendMessageToAllPlayers(censoredMessage);
-    }
+    // public void censorMessage(String message) { // causing maven to crash please fix
+    //     // Placeholder logic: Censor inappropriate words in the message
+    //     String censoredMessage = chatBox.censor(message);
+    //     sendMessageToAllPlayers(censoredMessage);
+    // }
 
     public void collapseChatBox() {
         // Placeholder logic: Collapse the chat box
@@ -128,7 +129,7 @@ public class GameSession {
 
      public void highlightWord(Position startPos, Position endPos, Player player) {
          // Placeholder logic: Highlight a word in the grid for a player
-         wordGrid.highlightWord(startPos, endPos, player);
+        //  wordGrid.highlightWord(startPos, endPos, player);
      }
 
     public void showWinner(Player winner) {
@@ -161,5 +162,14 @@ public class GameSession {
     public static void main(String args[]) {
         GameSession gameSession = new GameSession();
         gameSession.startGame();
-    }
+
+        int port = 9014; // group 14 port maybe
+        HttpServer H = new HttpServer(port, "./html");
+        H.start();
+        System.out.println("http Server started on port: " + port);
+
+        // create and start the websocket server
+        port = 9114;
+        System.out.println("websocket Server started on port: " + port);
+        }
 }
