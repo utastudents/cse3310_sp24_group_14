@@ -165,7 +165,7 @@ public class GameSession {
 
 
         String HttpPort = System.getenv("HTTP_PORT");
-        int port = 9080;
+        int port = 9014;
         if (HttpPort!=null) {
             port = Integer.valueOf(HttpPort);
           }
@@ -175,7 +175,7 @@ public class GameSession {
         System.out.println("http Server started on port: " + port);
 
         // create and start the websocket server
-        port = 9180;
+        port = 9114;
         String WSPort = System.getenv("WEBSOCKET_PORT");
         if (WSPort!=null) {
             port = Integer.valueOf(WSPort);
