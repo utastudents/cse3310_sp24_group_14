@@ -40,13 +40,13 @@ public class Client {
                 return;
             }
 
-            boolean isValid = currentSession.validateWordSelection(startPos, endPos);
-            if (isValid) {
-                System.out.println("Word accepted: " + word);
-                currentSession.updateScores(player, word.length()); // Assuming score is word length
-            } else {
-                System.out.println("Word rejected: " + word);
-            }
+            // boolean isValid = currentSession.validateWordSelection(startPos, endPos); // causing maven to crash please fix
+            // if (isValid) {
+            //     System.out.println("Word accepted: " + word);
+            //     currentSession.updateScores(player, word.length()); // Assuming score is word length
+            // } else {
+            //     System.out.println("Word rejected: " + word);
+            // }
         } else {
             System.out.println("No active game session.");
         }
