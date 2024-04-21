@@ -163,13 +163,23 @@ public class GameSession {
         GameSession gameSession = new GameSession();
         gameSession.startGame();
 
-        int port = 9014; // group 14 port maybe
+
+        String HttpPort = System.getenv("HTTP_PORT");
+        int port = 9080;
+        if (HttpPort!=null) {
+            port = Integer.valueOf(HttpPort);
+          }
+
         HttpServer H = new HttpServer(port, "./html");
         H.start();
         System.out.println("http Server started on port: " + port);
 
         // create and start the websocket server
-        port = 9114;
+        port = 9180;
+        String WSPort = System.getenv("WEBSOCKET_PORT");
+        if (WSPort!=null) {
+            port = Integer.valueOf(WSPort);
+          }
         System.out.println("websocket Server started on port: " + port);
         }
 }
