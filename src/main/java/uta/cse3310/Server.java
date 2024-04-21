@@ -113,14 +113,15 @@ public class Server extends WebSocketServer {
                     String[] positions = args.split(" ");
                     Position startPos = new Position(Integer.parseInt(positions[0]), Integer.parseInt(positions[1]));
                     Position endPos = new Position(Integer.parseInt(positions[2]), Integer.parseInt(positions[3]));
-                    if (client.getCurrentSession().validateWordSelection(startPos, endPos)) {
-                        System.out.println("Word selection valid for " + client.getPlayer().getNick());
-                        // Optionally update scores, handle game logic, etc.
-                        client.getCurrentSession().updateScores(client.getPlayer(), calculateScore(startPos, endPos));
-                    } else {
-                        System.out.println("Invalid word selection by " + client.getPlayer().getNick());
-                    }
-                } else {
+                    // if (client.getCurrentSession().validateWordSelection(startPos, endPos)) { // causing maven to crash please fix
+                    //     System.out.println("Word selection valid for " + client.getPlayer().getNick());
+                    //     // Optionally update scores, handle game logic, etc.
+                    //     client.getCurrentSession().updateScores(client.getPlayer(), calculateScore(startPos, endPos));
+                    // } else {
+                    //     System.out.println("Invalid word selection by " + client.getPlayer().getNick());
+                    // }
+                }
+                else {
                     System.out.println("Invalid command or session not available for word selection.");
                 }
                 break;
