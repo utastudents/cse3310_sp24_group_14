@@ -17,7 +17,7 @@ public class WordGridTest extends TestCase{
     }
 
     public void testPosition(){
-        //testing position functions to see if data is properly going from point A to point B
+        // testing position functions to see if data is properly going from point A to point B
 
         ArrayList<String> words = new ArrayList<String>(){
              {
@@ -40,7 +40,7 @@ public class WordGridTest extends TestCase{
         WordGrid wg = new WordGrid(6, words);
 
         // printing for demonstration
-        System.out.println("----------------TESTING MESSAGING----------------");
+        System.out.println("----------------TESTING WORDGRID----------------"); // changed this from 'messaging' to wordgrid to remove confusion
         wg.placeWords();
         wg.generateGrid();
 

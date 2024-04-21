@@ -9,6 +9,26 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+//added by Uriel
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.util.Collections;
+
+import org.java_websocket.WebSocket;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ClientHandshake;
+import org.java_websocket.server.WebSocketServer;
+import java.util.Vector;
+import java.time.Instant;
+import java.time.Duration;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 // export HTTP_PORT = 9014;
 // export WEBSOCKET_PORT = 9114;
 
@@ -163,12 +183,13 @@ public class GameSession {
 }
 
     public static void main(String args[]) {
+        int port = 9014;
         GameSession gameSession = new GameSession();
         gameSession.startGame();
 
 
         String HttpPort = System.getenv("HTTP_PORT");
-        int port = 9014;
+        // int port = 9014;
         if (HttpPort!=null) {
             port = Integer.valueOf(HttpPort);
           }
