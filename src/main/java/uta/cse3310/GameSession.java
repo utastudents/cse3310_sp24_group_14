@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+// export HTTP_PORT = 9014;
+// export WEBSOCKET_PORT = 9114;
+
 public class GameSession {
     public WordGrid wordGrid;
     private Map<Player, Integer> scores = new HashMap<>();
