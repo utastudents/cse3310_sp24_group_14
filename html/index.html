@@ -18,12 +18,14 @@
 
 <label id="topMessage"></label>
 
-<p>Enter your Nick below:</p>
+<p><center>Enter your Nick below:</center></p>
     
 <form>
-    <label for="nick">Nick:</label>
-    <input type="text" id="nick" name="nick"><br><br>
-    <input type="submit" value="Submit">
+    <center>
+        <label for="nick">Nick:</label>
+        <input type="text" id="nick" name="nick"><br><br>
+        <input type="submit" value="Submit">
+    </center>
 </form>
 
 <script>
@@ -31,7 +33,7 @@
 
     var serverUrl;
     serverUrl = "ws://" + window.location.hostname + ":" + (parseInt(location.port) + 100);
-    connection = new WebSocket(serverUrl);
+    connection = new WebSocket(serverUrl); // this is somehow broken and the websocket isn't connecting
 
     connection.onopen = function (evt) {
         console.log("open");
