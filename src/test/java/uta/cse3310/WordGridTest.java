@@ -17,7 +17,7 @@ public class WordGridTest extends TestCase{
     }
 
     public void testPosition(){
-        testing position functions to see if data is properly going from point A to point B
+        //testing position functions to see if data is properly going from point A to point B
 
         ArrayList<String> words = new ArrayList<String>(){
              {
