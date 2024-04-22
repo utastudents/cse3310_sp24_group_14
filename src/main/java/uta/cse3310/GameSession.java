@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//added by Uriel
+//added by Uriel 4/22/2024
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,6 +38,36 @@ public class GameSession {
     private ArrayList<Player> players;
     private Timer timer;
     private ChatBox chatBox;
+
+    // public GameSession(int port) {
+    //     super(new InetSocketAddress(port));
+    //   }
+    
+    //   public GameSession(InetSocketAddress address) {
+    //     super(address);
+    //   }
+    
+    //   public GameSession(int port, Draft_6455 draft) {
+    //     super(new InetSocketAddress(port), Collections.<Draft>singletonList(draft));
+    //   }
+
+    // @Override
+    // public void onOpen(WebSocket conn, ClientHandshake handshake) {
+
+    // // connectionId++;
+
+    // System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " connected");
+
+    // // ServerEvent E = new ServerEvent();
+
+    // // search for a game needing a player
+    // // Game G = null;
+    // // for (Game i : ActiveGames) {
+    // //   if (i.Players == uta.cse3310.PlayerType.XPLAYER) {
+    // //     G = i;
+    // //     System.out.println("found a match");
+    // //   }
+    // }
 
     public void startGame() {
         // wordGrid = selectWordGrid();
@@ -182,28 +212,28 @@ public class GameSession {
     }
 }
 
-    public static void main(String args[]) {
-        int port = 9014;
-        GameSession gameSession = new GameSession();
-        gameSession.startGame();
+    // public static void main(String args[]) {
+    //     int port = 9014;
+    //     GameSession gameSession = new GameSession();
+    //     gameSession.startGame();
 
 
-        String HttpPort = System.getenv("HTTP_PORT");
-        // int port = 9014;
-        if (HttpPort!=null) {
-            port = Integer.valueOf(HttpPort);
-          }
+    //     String HttpPort = System.getenv("HTTP_PORT");
+    //     // int port = 9014;
+    //     if (HttpPort!=null) {
+    //         port = Integer.valueOf(HttpPort);
+    //       }
 
-        HttpServer H = new HttpServer(port, "./html");
-        H.start();
-        System.out.println("http Server started on port: " + port);
+    //     HttpServer H = new HttpServer(port, "./html");
+    //     H.start();
+    //     System.out.println("http Server started on port: " + port);
 
-        // create and start the websocket server
-        port = 9114;
-        String WSPort = System.getenv("WEBSOCKET_PORT");
-        if (WSPort!=null) {
-            port = Integer.valueOf(WSPort);
-          }
-        System.out.println("websocket Server started on port: " + port);
-        }
+    //     // create and start the websocket server
+    //     port = 9114;
+    //     String WSPort = System.getenv("WEBSOCKET_PORT");
+    //     if (WSPort!=null) {
+    //         port = Integer.valueOf(WSPort);
+    //       }
+    //     System.out.println("websocket Server started on port: " + port);
+    // }
 }
