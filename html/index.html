@@ -168,7 +168,7 @@
                 <button class="room-button" type="button" onclick="showReadyUp()">Room 6</button>
 
                 <button class="chat-button" type="button" onclick="openChatBox()">Chat</button>
-                <button class="back-button" type="button">Back to Home</button>
+                <button class="back-button" type="button" onclick="backToHome()">Back to Home</button>
 
         </div>
     </div>
@@ -180,12 +180,16 @@
             <button class="room-button" type="button" onclick="showGame()">Ready Player 2</button>
             <button class="room-button" type="button" onclick="showGame()">Ready Player 3</button>
             <button class="room-button" type="button" onclick="showGame()">Ready Player 4</button>
+
+            <button class="back-button" type="button" onclick="backToLobby()">back</button>
+
         </div>
     </div>
 
     <div class="game-overlay" id="game">
         <div class="game-content">
             <h1>HappySearching!</h1>
+            <button class="back-button" type="button" oncick="quitGame()">Quit</button>
         </div>
     </div>
 
@@ -241,14 +245,29 @@
             document.getElementById("lobby").style.display = "flex";
         }
 
+        function backToHome() {
+            document.querySelector(".content").style.display = "flex";
+            document.getElementById("lobby").style.display = "none";
+        }
+
         function showReadyUp() {
             document.getElementById("lobby").style.display = "none";
             document.getElementById("readyup").style.display = "flex";
         }
 
+        function backToLobby() {
+            document.getElementById("readyup").style.display = "none";
+            document.getElementById("lobby").style.display = "flex";
+        }
+
         function showGame() {
             document.getElementById("readyup").style.display = "none";
             document.getElementById("game").style.display = "flex";
+        }
+
+        function quitGame() {
+            document.getElementById("game").style.display = "none";
+            document.getElementById("lobby").style.display = "flex";
         }
 
         function openChatBox() {
