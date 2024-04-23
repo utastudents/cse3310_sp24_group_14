@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,74 +8,258 @@
     <style>
         body {
             background-color: #b1b1b1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .content {
+            text-align: center;
+            position: relative;
+        }
+
+        .lobby-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #b1b1b1(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .lobby-content {
+            background-color: #c4c4c4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .enter-button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #39aa73;
+            color: white;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .enter-button:hover {
+            background-color: #349b69;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            top: 10px;
+            left: 10px;
+            border: none;
+            background-color: #ff4d4d;
+            color: white;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #ff3e3e;
+        }
+
+        .room-button {
+            padding: 5px 20px;
+            border: none;
+            background-color: #39aa73;
+            color: white;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .room-button:hover {
+            background-color: #349b69;
+        }
+
+        .chat-button {
+            padding: 5px 20px;
+            border: none;
+            background-color: #398aaa;
+            color: white;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .chat-button:hover {
+            background-color: #277ea1;
+        }
+
+        .readyup-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #b1b1b1(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .readyup-content {
+            background-color: #c4c4c4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #b1b1b1(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .game-content {
+            background-color: #c4c4c4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
         }
     </style>
 </head>
 
-<body> 
-<h1><center>TheWordSearchGame</center></h1>
+<body>
+    <div class="content">
+        <h1>TheWordSearchGame</h1>
 
-<div id="wordGrid"></div>
+        <div id="wordGrid"></div>
 
-<label id="topMessage"></label>
+        <label id="topMessage"></label>
 
-<p><center>Enter your Nick below:</center></p>
-    
-<form>
-    <center>
-        <label for="nick">Nick:</label>
-        <input type="text" id="nick" name="nick"><br><br>
-        <input type="submit" value="Submit">
-    </center>
-</form>
+        <p>Enter your user name</p>
 
-<script>
-    var connection = null;
+        <form>
+            <input type="text" id="nick" name="nick"><br><br>
+            <button class="enter-button" type="button" onclick="showLobby()">Enter Lobby</button>
+        </form>
+    </div>
 
-    var serverUrl;
-    serverUrl = "ws://" + window.location.hostname + ":" + (parseInt(location.port) + 100);
-    connection = new WebSocket(serverUrl); // this is somehow broken and the websocket isn't connecting
+    <div class="lobby-overlay" id="lobby">
+        <div class="lobby-content">
+            <h1>TheWordSearchGame Lobby</h2>
+                <button class="room-button" type="button" onclick="showReadyUp()">Room 1</button>
+                <button class="room-button" type="button" onclick="showReadyUp()">Room 2</button>
+                <button class="room-button" type="button" onclick="showReadyUp()">Room 3</button>
+                <button class="room-button" type="button" onclick="showReadyUp()">Room 4</button>
+                <button class="room-button" type="button" onclick="showReadyUp()">Room 5</button>
+                <button class="room-button" type="button" onclick="showReadyUp()">Room 6</button>
 
-    connection.onopen = function (evt) {
-        console.log("open");
-    }
+                <button class="chat-button" type="button" onclick="openChatBox()">Chat</button>
+                <button class="back-button" type="button">Back to Home</button>
 
-    connection.onclose = function (evt) {
-        console.log("close");
-        document.getElementById("topMessage").innerHTML = "Server Offline"
-    }
+        </div>
+    </div>
 
-    connection.onmessage = function (evt) {
-        var msg = evt.data;
-        console.log("Message received: " + msg);
-        const obj = JSON.parse(msg);
+    <div class="readyup-overlay" id="readyup">
+        <div class="readyup-content">
+            <h1>Ready Up! 4 Players Required</h1>
+            <button class="room-button" type="button" onclick="showGame()">Ready Player 1</button>
+            <button class="room-button" type="button" onclick="showGame()">Ready Player 2</button>
+            <button class="room-button" type="button" onclick="showGame()">Ready Player 3</button>
+            <button class="room-button" type="button" onclick="showGame()">Ready Player 4</button>
+        </div>
+    </div>
 
-        if ('WordGrid' in obj) {
-            // Render the word grid
-            renderWordGrid(obj.WordGrid);
-        } else if ('Message' in obj) {
-            document.getElementById("topMessage").innerHTML = obj.Message;
+    <div class="game-overlay" id="game">
+        <div class="game-content">
+            <h1>HappySearching!</h1>
+        </div>
+    </div>
+
+    <script>
+        var connection = null;
+
+        var serverUrl;
+        serverUrl = "ws://" + window.location.hostname + ":" + (parseInt(location.port) + 100);
+        connection = new WebSocket(serverUrl); // this wobsocket is working now!
+
+        connection.onopen = function (evt) {
+            console.log("open");
         }
-    }
 
-    function renderWordGrid(wordGrid) {
-        var gridHtml = "<table>";
-        for (var i = 0; i < wordGrid.length; i++) {
-            gridHtml += "<tr>";
-            for (var j = 0; j < wordGrid[i].length; j++) {
-                gridHtml += "<td><button id='b" + (i * wordGrid.length + j) + "' onclick='buttonClick(" + i + "," + j + ")'>" + wordGrid[i][j] + "</button></td>";
+        connection.onclose = function (evt) {
+            console.log("close");
+            document.getElementById("topMessage").innerHTML = "Server Offline"
+        }
+
+        connection.onmessage = function (evt) {
+            var msg = evt.data;
+            console.log("Message received: " + msg);
+            const obj = JSON.parse(msg);
+
+            if ('WordGrid' in obj) {
+                // Render the word grid
+                renderWordGrid(obj.WordGrid);
+            } else if ('Message' in obj) {
+                document.getElementById("topMessage").innerHTML = obj.Message;
             }
-            gridHtml += "</tr>";
         }
-        gridHtml += "</table>";
-        document.getElementById("wordGrid").innerHTML = gridHtml;
-    }
 
-    function buttonClick(row, col) {
-        var position = { "row": row, "col": col };
-        connection.send(JSON.stringify(position));
-    }
-</script>
+        function renderWordGrid(wordGrid) {
+            var gridHtml = "<table>";
+            for (var i = 0; i < wordGrid.length; i++) {
+                gridHtml += "<tr>";
+                for (var j = 0; j < wordGrid[i].length; j++) {
+                    gridHtml += "<td><button id='b" + (i * wordGrid.length + j) + "' onclick='buttonClick(" + i + "," + j + ")'>" + wordGrid[i][j] + "</button></td>";
+                }
+                gridHtml += "</tr>";
+            }
+            gridHtml += "</table>";
+            document.getElementById("wordGrid").innerHTML = gridHtml;
+        }
 
+        function buttonClick(row, col) {
+            var position = { "row": row, "col": col };
+            connection.send(JSON.stringify(position));
+        }
+
+        function showLobby() {
+            document.querySelector(".content").style.display = "none";
+            document.getElementById("lobby").style.display = "flex";
+        }
+
+        function showReadyUp() {
+            document.getElementById("lobby").style.display = "none";
+            document.getElementById("readyup").style.display = "flex";
+        }
+
+        function showGame() {
+            document.getElementById("readyup").style.display = "none";
+            document.getElementById("game").style.display = "flex";
+        }
+
+        function openChatBox() {
+            document.getElementById("chat").style.display = "block";
+        }
+
+        function closeChatBox() {
+            document.getElementById("chat").style.display = "none";
+        }
+
+    </script>
 </body>
+
 </html>
