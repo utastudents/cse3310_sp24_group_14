@@ -189,7 +189,7 @@
     <div class="game-overlay" id="game">
         <div class="game-content">
             <h1>HappySearching!</h1>
-            <button class="back-button" type="button" oncick="quitGame()">Quit</button>
+            <button class="back-button" type="button" onclick="quitGame()">Quit</button>
         </div>
     </div>
 
@@ -267,6 +267,7 @@
 
         function quitGame() {
             document.getElementById("game").style.display = "none";
+            document.getElementById("readyup").style.display = "none";
             document.getElementById("lobby").style.display = "flex";
         }
 
