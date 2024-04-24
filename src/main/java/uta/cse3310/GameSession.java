@@ -37,7 +37,7 @@ public class GameSession {
             BufferedReader reader = new BufferedReader(new FileReader("resources/words.txt"));
             word = reader.readLine();
             while(word != null){
-                if(word.length() > 2 && word.length() < 7)
+                if(word.length() > 3 && word.length() < 6)
                 allwords.add(word);
                 word = reader.readLine();
             }
