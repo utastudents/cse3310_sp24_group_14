@@ -19,7 +19,7 @@ public class GameSession {
     public WordGrid Grid;
     public ArrayList<String> Wordbank;
     public int playercount = 0;
-    public Position[][] buttons = new Position[35][35];
+    public Position[][] buttons = new Position[20][20];
     boolean Start = false;
 
     GameSession() {
@@ -37,7 +37,7 @@ public class GameSession {
             BufferedReader reader = new BufferedReader(new FileReader("resources/words.txt"));
             word = reader.readLine();
             while(word != null){
-                if(word.length() > 2 && word.length() < 8)
+                if(word.length() > 2 && word.length() < 7)
                 allwords.add(word);
                 word = reader.readLine();
             }
