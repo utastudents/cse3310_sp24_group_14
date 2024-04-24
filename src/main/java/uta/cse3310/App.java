@@ -26,9 +26,9 @@ public class App extends WebSocketServer {
 
   // All games currently underway on this server are stored in
   // the vector ActiveGames
-  //private Vector<Game> ActiveGames = new Vector<Game>();
+  private Vector<GameSession> ActiveGames = new Vector<GameSession>();   //changed by Kawther, hook up with GameSession
 
-  //private int GameId = 1;
+  private int GameId = 1;
 
   private int connectionId = 0;
 
