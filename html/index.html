@@ -47,9 +47,10 @@
 
         .leaderboard-container {
             position: absolute;
-            top: 20%;
+            top: 10%;
             left: 3%;
             width: 15%;
+            height: 80%;
             border-radius: 20px;
             background-color: #c4c4c4;
             padding: 10px;
@@ -70,13 +71,14 @@
 
         .chat-container {
             position: absolute;
-            top: 20%;
+            top: 10%;
             right: 3%;
             width: 15%;
-            height: 50%;
+            height: 80%;
             border-radius: 20px;
             background-color: #c4c4c4;
             padding: 10px;
+
             z-index: 999;
         }
 
@@ -88,25 +90,47 @@
             text-align: center;
             width: 50%;
             height: 50%;
+
             margin: 10% auto;
         }
 
-        .chat-container contactlist {
 
+        .contact-button {
+            background-color: #349b69;
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 80%;
+            padding: 5px 20px;
+            border: none;
+            background-color: #398aaa;
+            color: white;
+            font-size: 16px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .contact-button:hover {
+            background-color: #349b69;
+        }
+
+        .selected-contact {
+            background-color: #3b6e55;
         }
 
         .chat-container textarea {
         position: relative;
         width: 90%;
-        height: 100%;
-        right: 0%;
+        height: 20%;
+        top: 60%; 
+        left: 1%;
         padding: 10px;
         margin: 2px 0 15px 0;
         border: auto;
         border-radius: 20px;
-        background: #f1f1f1;
+        background: #c4c4c4;
         resize: none;
-        min-height: 175px;
+        max-height: 5%;
         }
 
         .chat-container textarea:focus {
@@ -172,7 +196,8 @@
         .chat-button {
             position: absolute;
             bottom: 5%;
-            left: 20%;
+            right: 10%;
+            width: 80%;
             padding: 5px 20px;
             border: none;
             background-color: #398aaa;
@@ -303,12 +328,12 @@
 
         <div class="chat-container">
             <h2><center>Chat</center></h2>
-            <form action="/action_page.php" class="form-container">            
-                <label for="msg">Message</label>
-                <textarea placeholder="Your Message" name="msg" required></textarea>
-            
-                <button class="chat-button" type="button">Send Message</button>
-            </form>
+            <label for="msg">Select who you would like to message</label>
+            <button class="contact-button" type="button">All Players</button>
+        
+            <p>Player 1: Hello everyone</p>
+            <textarea placeholder="Your Message" name="msg" required></textarea>
+            <button class="chat-button" type="button" onclick="sendMessage()">Send Message</button>
         </div>
     </div>
     
@@ -411,12 +436,8 @@
             document.getElementById("lobby").style.display = "flex";
         }
 
-        function openChatBox() {
-            document.getElementById("chat").style.display = "block";
-        }
-
-        function closeChatBox() {
-            document.getElementById("chat").style.display = "none";
+        function sendMessage() {
+            document.getElementById()
         }
 
     </script>
