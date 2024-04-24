@@ -31,8 +31,8 @@
 
         .lobbyScreen {
             position: relative;
-            top: 0;
-            left: 0;
+            /* top: 0;
+            left: 0; */
             width: 100%;
             height: 100%;
             background-color: #b1b1b1(0, 0, 0, 0.5);
@@ -241,10 +241,8 @@
 
         .gameScreen {
             position: absolute;
-            top: 20%;
-            /* right: 50%; */
-            width: 50%;
-            height: 50%;
+            width: 100%;
+            height: 70%;
             background-color: #b1b1b1(0, 0, 0, 0.5);
             display: none;
             justify-content: center;
@@ -258,7 +256,7 @@
             border-radius: 10px;
             text-align: center;
             width: 80%;
-            height: 80%;
+            height: 50%;
             margin: 10% auto;
         }
     </style>
@@ -275,37 +273,12 @@
 
         <p>Enter your user name</p>
 
-        <form>
+        <form id="userInfo">
             <input type="text" id="nick" name="nick"><br><br>
             <button class="enter-button" type="button" onclick="showLobby()">Enter Lobby</button>
         </form>
     </div>
 
-    <!-- <div class="lobbyScreen" id="lobby">
-        <div class="lobby-content">
-            <h1>TheWordSearchGame Lobby</h2>
-                <button class="room-button" type="button" onclick="showReadyUp()">Room 1</button>
-                <button class="room-button" type="button" onclick="showReadyUp()">Room 2</button>
-                <button class="room-button" type="button" onclick="showReadyUp()">Room 3</button>
-                <button class="room-button" type="button" onclick="showReadyUp()">Room 4</button>
-                <button class="room-button" type="button" onclick="showReadyUp()">Room 5</button>
-                <button class="room-button" type="button" onclick="showReadyUp()">Room 6</button>
-        </div>
-
-        <div class="button-container">
-            <button class="back-button" type="button" onclick="backToHome()">Back</button>
-            <button class="chat-button" type="button" onclick="openChatBox()">Chat</button>
-        </div>
-
-        <div class="leaderboard-container">
-            <h2>TWSG Leaderboard:</h2>
-            <p>Player 1</p>
-            <p>Player 2</p>
-            <p>Player 3</p>
-            <p>Player 4</p>
-            <p>Player N</p>
-        </div>
-    </div> -->
     <div class="lobbyScreen" id="lobby">
         <div class="leaderboard-container">
             <h2>TWSG Leaderboard</h2>
@@ -315,17 +288,10 @@
             <p>Player 4</p>
             <p>Player N</p>
         </div>
-        <div class="lobby-content">
+        <div class="lobby-content" id="lobbyContent">
             <button class="back-button" type="button" onclick="backToHome()">Back</button>
             <h1>TheWordSearchGame Lobby</h1>
-            <!-- <div class="leaderboard-container">
-                <h2>TWSG Leaderboard:</h2>
-                <p>Player 1</p>
-                <p>Player 2</p>
-                <p>Player 3</p>
-                <p>Player 4</p>
-                <p>Player N</p>
-            </div> -->
+            
             <button class="room-button" type="button" onclick="showReadyUp()">Room 1</button>
             <button class="room-button" type="button" onclick="showReadyUp()">Room 2</button>
             <button class="room-button" type="button" onclick="showReadyUp()">Room 3</button>
@@ -334,7 +300,7 @@
             <button class="room-button" type="button" onclick="showReadyUp()">Room 6</button>
         </div>
 
-        <div class="chat-container">
+        <div class="chat-container" id="chatBox">
             <h2><center>Chat</center></h2>
             <!-- <label for="msg">Select who you would like to message</label> -->
             <!-- <button class="contact-button" type="button">All Players</button> -->
@@ -348,14 +314,12 @@
 
     <div class="readyupScreen" id="readyup">
         <div class="readyup-content">
+            <button class="back-button" type="button" onclick="backToLobby()">Back</button>
             <h1>Ready Up! 4 Players Required</h1>
             <button class="room-button" type="button" onclick="showGame()">Ready Player 1</button>
             <button class="room-button" type="button" onclick="showGame()">Ready Player 2</button>
             <button class="room-button" type="button" onclick="showGame()">Ready Player 3</button>
             <button class="room-button" type="button" onclick="showGame()">Ready Player 4</button>
-
-            <button class="back-button" type="button" onclick="backToLobby()">Back</button>
-
         </div>
     </div>
 
@@ -367,6 +331,13 @@
     </div>
 
     <script>
+    var playerIdx = "nick";
+    var gameId = -1;
+        class UserEvent {
+            // Button = -1;
+            playerIdx = "nick";
+            gameId = 0;
+        }
         var connection = null;
 
         var serverUrl;
@@ -387,35 +358,40 @@
             console.log("Message received: " + msg);
             const obj = JSON.parse(msg);
 
-            if ('WordGrid' in obj) {
-                // Render the word grid
-                renderWordGrid(obj.WordGrid);
-            } else if ('Message' in obj) {
-                document.getElementById("topMessage").innerHTML = obj.Message;
-            }
+            // if ('WordGrid' in obj) {
+            //     // Render the word grid
+            //     renderWordGrid(obj.WordGrid);
+            // } else if ('Message' in obj) {
+            //     document.getElementById("topMessage").innerHTML = obj.Message;
+            // }
         }
 
-        function renderWordGrid(wordGrid) {
-            var gridHtml = "<table>";
-            for (var i = 0; i < wordGrid.length; i++) {
-                gridHtml += "<tr>";
-                for (var j = 0; j < wordGrid[i].length; j++) {
-                    gridHtml += "<td><button id='b" + (i * wordGrid.length + j) + "' onclick='buttonClick(" + i + "," + j + ")'>" + wordGrid[i][j] + "</button></td>";
-                }
-                gridHtml += "</tr>";
-            }
-            gridHtml += "</table>";
-            document.getElementById("wordGrid").innerHTML = gridHtml;
-        }
+        // function renderWordGrid(wordGrid) {
+        //     var gridHtml = "<table>";
+        //     for (var i = 0; i < wordGrid.length; i++) {
+        //         gridHtml += "<tr>";
+        //         for (var j = 0; j < wordGrid[i].length; j++) {
+        //             gridHtml += "<td><button id='b" + (i * wordGrid.length + j) + "' onclick='buttonClick(" + i + "," + j + ")'>" + wordGrid[i][j] + "</button></td>";
+        //         }
+        //         gridHtml += "</tr>";
+        //     }
+        //     gridHtml += "</table>";
+        //     document.getElementById("wordGrid").innerHTML = gridHtml;
+        // }
 
-        function buttonClick(row, col) {
-            var position = { "row": row, "col": col };
-            connection.send(JSON.stringify(position));
-        }
+        // function buttonClick(row, col) {
+        //     var position = { "row": row, "col": col };
+        //     connection.send(JSON.stringify(position));
+        // }
 
         function showLobby() {
+            U = new UserEvent();
+            U.playerIdx = "userInfo";
             document.querySelector(".content").style.display = "none";
             document.getElementById("lobby").style.display = "flex";
+
+            connection.send(JSON.stringify(U));
+            console.log(JSON.stringify(U));
         }
 
         function backToHome() {
@@ -444,8 +420,8 @@
             document.getElementById("lobby").style.display = "flex";
         }
 
-        function sendMessage() {
-            document.getElementById();
+        function sendMessageToAll() {
+            document.getElementById(event);
         }
 
     </script>
