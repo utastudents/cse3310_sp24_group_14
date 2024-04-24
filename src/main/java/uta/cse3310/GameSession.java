@@ -49,14 +49,14 @@ public class GameSession {
         }
 
 
-        Grid = new WordGrid(35, allwords);
+        Grid = new WordGrid(20, allwords);
         Wordbank = new ArrayList<>(Grid.wordsInGrid);
         Grid.placeWords();
         Grid.generateGrid();
         int i, j;
 
-        for(i = 0; i < 35;i++){
-            for(j= 0; j < 35; j++){
+        for(i = 0; i < 20;i++){
+            for(j= 0; j < 20; j++){
                 buttons[i][j] = new Position(i, j);
             }
         }
