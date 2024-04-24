@@ -127,11 +127,11 @@
         }
 
         .chat-container textarea {
-        position: relative;
-        width: 90%;
-        height: 20%;
-        top: 60%; 
-        left: 1%;
+        position: fixed;
+        width: 14%;
+        height: 18%;
+        bottom: 15%; 
+        right: 3.5%;
         padding: 10px;
         margin: 2px 0 15px 0;
         border: auto;
@@ -336,10 +336,10 @@
 
         <div class="chat-container">
             <h2><center>Chat</center></h2>
-            <label for="msg">Select who you would like to message</label>
-            <button class="contact-button" type="button">All Players</button>
+            <!-- <label for="msg">Select who you would like to message</label> -->
+            <!-- <button class="contact-button" type="button">All Players</button> -->
         
-            <p>Player 1: Hello everyone</p>
+            <!-- <p>Player 1: Hello everyone</p> -->
             <textarea placeholder="Your Message" name="msg" required></textarea>
             <button class="chat-button" type="button" onclick="sendMessage()">Send Message</button>
         </div>
