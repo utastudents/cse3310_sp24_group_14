@@ -55,7 +55,7 @@ public class App extends WebSocketServer {
 
     System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " connected");
 
-    //ServerEvent E = new ServerEvent();
+    // ServerEvent E = new ServerEvent();
 
     // search for a game needing a player
     //Game G = null;
