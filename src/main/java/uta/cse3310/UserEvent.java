@@ -3,16 +3,18 @@ package uta.cse3310;
 
 public class UserEvent {
     int GameId; // the game ID on the server
-    //PlayerType PlayerIdx; // either an XPLAYER or an OPLAYER
-    int Button; // will be used to select words
+    Player PlayerIdx; // either an XPLAYER or an OPLAYER
+    Position Button1; // Starting position of word
+    Position Button2; // ending position of grid
 
     UserEvent() {
 
     }
 
-    UserEvent(int _GameId, /*PlayerType _PlayerIdx,*/ int _Button) {
+    UserEvent(int _GameId, Player _PlayerIdx, Position _Button1, Position _Button2) {
         GameId = _GameId;
-        //PlayerIdx = _PlayerIdx;
-        Button = _Button;
+        PlayerIdx = _PlayerIdx;
+        Button1 = _Button1;
+        Button2 = _Button2;
     }
 }
