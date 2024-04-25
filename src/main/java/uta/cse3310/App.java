@@ -16,6 +16,7 @@ import org.java_websocket.server.WebSocketServer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.ArrayList;
 import java.time.Instant;
 import java.time.Duration;
 
@@ -31,8 +32,9 @@ public class App extends WebSocketServer {
   private int GameId = 1;
 
   private int connectionId = 0;
-
   private Instant startTime;
+  private Lobby lobby;
+  public ArrayList<Player> players = new ArrayList<Player>();
 
   //private Statistics stats;
 
@@ -54,17 +56,20 @@ public class App extends WebSocketServer {
     connectionId++;
 
     System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " connected");
+    if(lobby == null){
+      lobby = new Lobby(); //create lobby
+    }
 
-    // ServerEvent E = new ServerEvent();
+    ServerEvent E = new ServerEvent();
 
     // search for a game needing a player
-    //Game G = null;
-    //for (Game i : ActiveGames) {
-    //  if (i.Players == uta.cse3310.PlayerType.XPLAYER) {
-    //    G = i;
-    //    System.out.println("found a match");
-    //  }
-    //}
+    GameSession G = null;
+    for (GameSession i : ActiveGames) {
+      if (!i.isFull()) { //if game isn't full it needs a player
+        G = i;
+        System.out.println("found a match");
+      }
+    }
 
     // No matches ? Create a new Game.
     // if (G == null) {
