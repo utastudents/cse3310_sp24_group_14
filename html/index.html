@@ -27,6 +27,7 @@
         .content {
             text-align: center;
             position: relative;
+            color: #ddd;
         }
 
         .lobbyScreen {
@@ -273,10 +274,9 @@
 
         <p>Enter your user name</p>
 
-        <form id="userInfo">
-            <input type="text" id="nick" name="nick"><br><br>
-            <button class="enter-button" type="button" onclick="showLobby()">Enter Lobby</button>
-        </form>
+        <input type="text" id="nick"><br><br>
+        <button class="enter-button" type="button" onclick="userName(); showLobby();">Enter Lobby</button>
+        
     </div>
 
     <div class="lobbyScreen" id="lobby">
@@ -384,14 +384,25 @@
         //     connection.send(JSON.stringify(position));
         // }
 
+        function userName(){
+            var username = document.getElementById("nick").value;
+            if(username == ""){
+                alert('You must enter a user name to enter the game lobby');
+                return;
+            }
+
+            connection.send(JSON.stringify({name: username}));
+        }
+
         function showLobby() {
-            U = new UserEvent();
-            U.playerIdx = "userInfo";
+            // var username = 
+            // U = new UserEvent();
+            // U.playerIdx = "userInfo";
             document.querySelector(".content").style.display = "none";
             document.getElementById("lobby").style.display = "flex";
 
-            connection.send(JSON.stringify(U));
-            console.log(JSON.stringify(U));
+            // connection.send(JSON.stringify(U));
+            // console.log(JSON.stringify(U));
         }
 
         function backToHome() {
