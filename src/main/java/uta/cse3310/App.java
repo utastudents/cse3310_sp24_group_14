@@ -27,19 +27,21 @@ public class App extends WebSocketServer {
 
   // All games currently underway on this server are stored in
   // the vector ActiveGames
-  private Vector<GameSession> ActiveGames = new Vector<GameSession>();   //changed by Kawther, hook up with GameSession
+  private Vector<GameSession> ActiveGames = new Vector<GameSession>(); // changed by Kawther, hook up with GameSession
 
   private int GameId = 1;
+  private int ClientId = 0; // This is a global client ID, starts at 1
 
   private int connectionId = 0;
   private Instant startTime;
   private Lobby lobby;
   public ArrayList<Player> players = new ArrayList<Player>();
 
-  //private Statistics stats;
+  // private Statistics stats;
 
   public App(int port) {
     super(new InetSocketAddress(port));
+    lobby = new Lobby(); // create lobby
   }
 
   public App(InetSocketAddress address) {
@@ -56,64 +58,42 @@ public class App extends WebSocketServer {
     connectionId++;
 
     System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " connected");
-    if(lobby == null){
-      lobby = new Lobby(); //create lobby
-    }
+
+    // This is the first time we have heard from this client, so let's send him some
+    // information;
 
     ServerEvent E = new ServerEvent();
 
-    // search for a game needing a player
-    GameSession G = null;
-    for (GameSession i : ActiveGames) {
-      if (!i.isFull()) { //if game isn't full it needs a player
-        G = i;
-        System.out.println("found a match");
-      }
-    }
+    // We won't have a game ID for a while. Setting it to -1 for now
+    // This may need to be moved to a different class, but in the interest
+    // of not rippling changes into code I do not understand, it is here.
+    E.GameId = -1;
+    ClientId++;
+    E.ClientId = ClientId;
+    // This line is a hack, to make it easier in the javascript to ID
+    // what class is in the msg
+    E.ServerEvent = "ServerEvent";
 
-    // No matches ? Create a new Game.
-    // if (G == null) {
-    //   G = new Game(stats);
-    //   G.GameId = GameId;
-    //   GameId++;
-    //   // Add the first player
-    //   G.Players = PlayerType.XPLAYER;
-    //   ActiveGames.add(G);
-    //   System.out.println(" creating a new Game");
-    // } else {
-    //   // join an existing game
-    //   System.out.println(" not a new game");
-    //   G.Players = PlayerType.OPLAYER;
-    //   G.StartGame();
-    // }
-
-    // create an event to go to only the new player
-    // E.YouAre = G.Players;
-    // E.GameId = G.GameId;
-
-    // allows the websocket to give us the Game when a message arrives..
-    // it stores a pointer to G, and will give that pointer back to us
-    // when we ask for it
-    //conn.setAttachment(G);
-
+    // Make E, an instance of the class ServerEvent into a json string
     Gson gson = new Gson();
+    String jsonString = gson.toJson(E);
 
-    // Note only send to the single connection
-    // String jsonString = gson.toJson(E);
-    // conn.send(jsonString);
-    // System.out
-    //     .println("> " + Duration.between(startTime, Instant.now()).toMillis() + " " + connectionId + " "
-    //         + escape(jsonString));
+    // And send it to only the client that just opened the connection
+    conn.send(jsonString);
 
-    // Update the running time
-    // stats.setRunningTime(Duration.between(startTime, Instant.now()).toSeconds());
+    // Some info that will help in debugging
+    System.out
+        .println("> " + Duration.between(startTime, Instant.now()).toMillis() + " " + connectionId + " "
+            + escape(jsonString));
 
-    // The state of the game has changed, so lets send it to everyone
-    // jsonString = gson.toJson(G);
-    // System.out
-    //     .println("< " + Duration.between(startTime, Instant.now()).toMillis() + " " + "*" + " " + escape(jsonString));
-    // broadcast(jsonString);
+    // Adding a null pointer for a local data in the WebSocket instance is probably
+    // not needed
+    // but I am going to do it anyway. This is an indicator that this client has not
+    // been put in the lobby and is not in a game. Yet.
+    conn.setAttachment(null);
 
+    // There is not much more that can be done. The client web page has loaded, and
+    // the websocket connection is created.
   }
 
   @Override
@@ -129,27 +109,59 @@ public class App extends WebSocketServer {
     System.out
         .println("< " + Duration.between(startTime, Instant.now()).toMillis() + " " + "-" + " " + escape(message));
 
-    // Bring in the data from the webpage
-    // A UserEvent is all that is allowed at this point
+    GameSession GS = null;
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
-    // UserEvent U = gson.fromJson(message, UserEvent.class);
 
-    // Update the running time
-    // stats.setRunningTime(Duration.between(startTime, Instant.now()).toSeconds());
+    // This is where all messages come in from the client. Different messages are
+    // received based upon where
+    // we are in the game. To make it easier to identify the messages, a field in
+    // the message is set equal
+    // to the class name.
 
-    // Get our Game Object
-    // Game G = conn.getAttachment();
-    // G.Update(U);
+    if (message.indexOf("NameEvent") > 0) {
+      NameEvent N = gson.fromJson(message, NameEvent.class);
 
-    // send out the game state every time
-    // to everyone
-    // String jsonString;
-    // jsonString = gson.toJson(G);
+      // Now we have a name
+      System.out.println(N.name);
 
-    // System.out
-    //     .println("> " + Duration.between(startTime, Instant.now()).toMillis() + " " + "*" + " " + escape(jsonString));
-    // broadcast(jsonString);
+      // Put it in the lobby
+      lobby.addPlayer(N.name, N.ClientId);
+
+    } else if (message.indexOf("something") > 0) {
+      // here is where we get the information to join a game
+      // need to call conn.setAttachment here and pass it the
+      // GameSession object
+
+    } else if (message.indexOf("aaaaa") > 0) {
+      // Get our Game Session
+      // Game G = conn.getAttachment();
+      // G.Update(U);
+
+    }
+
+    // After the incoming messag is processed, we need to send updated
+    // state information to all of the players. With what I know right now,
+    // this consists of the "Lobby" and the "GameSession"
+
+    if (GS != null) {
+      String jsonString;
+      jsonString = gson.toJson(GS);
+      System.out
+          .println("> " + Duration.between(startTime, Instant.now()).toMillis() + " " +
+              "*" + " " + escape(jsonString));
+      broadcast(jsonString);
+    }
+
+    if (lobby != null) {
+      String jsonString;
+      jsonString = gson.toJson(lobby);
+      System.out
+          .println("> " + Duration.between(startTime, Instant.now()).toMillis() + " " +
+              "*" + " " + escape(jsonString));
+      broadcast(jsonString);
+    }
+
   }
 
   @Override
@@ -192,7 +204,7 @@ public class App extends WebSocketServer {
 
     String HttpPort = System.getenv("HTTP_PORT");
     int port = 9014;
-    if (HttpPort!=null) {
+    if (HttpPort != null) {
       port = Integer.valueOf(HttpPort);
     }
 
@@ -206,7 +218,7 @@ public class App extends WebSocketServer {
 
     port = 9114;
     String WSPort = System.getenv("WEBSOCKET_PORT");
-    if (WSPort!=null) {
+    if (WSPort != null) {
       port = Integer.valueOf(WSPort);
     }
 

@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TheWordSearchGame</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-
         @keyframes backgroundAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
+
         body {
             background: linear-gradient(270deg, #1a2a6c, #b21f1f, #fdbb2d);
             background-size: 600% 600%;
@@ -52,7 +61,7 @@
             height: 50%;
             margin: 10% auto;
         }
-        
+
 
         .leaderboard-container {
             position: absolute;
@@ -128,25 +137,25 @@
         }
 
         .chat-container textarea {
-        position: fixed;
-        width: 14%;
-        height: 18%;
-        bottom: 15%; 
-        right: 3.5%;
-        padding: 10px;
-        margin: 2px 0 15px 0;
-        border: auto;
-        border-radius: 20px;
-        background: #c4c4c4;
-        resize: none;
-        max-height: 5%;
+            position: fixed;
+            width: 14%;
+            height: 18%;
+            bottom: 15%;
+            right: 3.5%;
+            padding: 10px;
+            margin: 2px 0 15px 0;
+            border: auto;
+            border-radius: 20px;
+            background: #c4c4c4;
+            resize: none;
+            max-height: 5%;
         }
 
         .chat-container textarea:focus {
-        background-color: #ddd;
-        outline: none;
+            background-color: #ddd;
+            outline: none;
         }
-        
+
         .enter-button {
             padding: 10px 20px;
             border: none;
@@ -264,6 +273,7 @@
 </head>
 
 <!-- div stuff goes here (content that will actually get displayed) -->
+
 <body>
     <div class="content">
         <h1>TheWordSearchGame</h1>
@@ -276,7 +286,7 @@
 
         <input type="text" id="nick"><br><br>
         <button class="enter-button" type="button" onclick="userName(); showLobby();">Enter Lobby</button>
-        
+
     </div>
 
     <div class="lobbyScreen" id="lobby">
@@ -291,7 +301,7 @@
         <div class="lobby-content" id="lobbyContent">
             <button class="back-button" type="button" onclick="backToHome()">Back</button>
             <h1>TheWordSearchGame Lobby</h1>
-            
+
             <button class="room-button" type="button" onclick="showReadyUp()">Room 1</button>
             <button class="room-button" type="button" onclick="showReadyUp()">Room 2</button>
             <button class="room-button" type="button" onclick="showReadyUp()">Room 3</button>
@@ -301,13 +311,15 @@
         </div>
 
         <div class="chat-container" id="chatBox">
-            <h2><center>Global Chat</center></h2>
-            
+            <h2>
+                <center>Global Chat</center>
+            </h2>
+
             <textarea placeholder="Your Message" name="msg" required></textarea>
             <button class="chat-button" type="button" onclick="sendMessage()">Send Message</button>
         </div>
     </div>
-    
+
 
     <div class="readyupScreen" id="readyup">
         <div class="readyup-content">
@@ -328,8 +340,9 @@
     </div>
 
     <script>
-    var playerIdx = "nick";
-    var gameId = -1;
+        var ClientId; // This is an ID from the server, value of 1 to N.  It is unique to this client
+        var playerIdx = "nick";
+        var gameId = -1;
         class UserEvent {
             // Button = -1;
             playerIdx = "nick";
@@ -355,12 +368,22 @@
             console.log("Message received: " + msg);
             const obj = JSON.parse(msg);
 
-            // if ('WordGrid' in obj) {
-            //     // Render the word grid
-            //     renderWordGrid(obj.WordGrid);
-            // } else if ('Message' in obj) {
-            //     document.getElementById("topMessage").innerHTML = obj.Message;
-            // }
+            // Only a couple of different messages can arrive here.
+            // let's make a block of code to handle each of them.
+
+            // Placing the name of the class in the class is a hack,
+            // but it makes this code more deliberate
+            if ('ServerEvent' in obj) {
+                ClientId = obj.ClientId;
+                // gameId may not have a valid value at this time...
+                gameId = obj.ClientId;
+            }
+            if ('Lobby' in obj) {
+
+                // not sure of what to do here?  is something to be displayed?
+
+            }
+
         }
 
         // function renderWordGrid(wordGrid) {
@@ -381,14 +404,16 @@
         //     connection.send(JSON.stringify(position));
         // }
 
-        function userName(){
+        function userName() {
             var username = document.getElementById("nick").value;
-            if(username == ""){
+            if (username == "") {
                 alert('You must enter a user name to enter the game lobby');
                 return;
             }
 
-            connection.send(JSON.stringify({name: username}));
+            jsonString = JSON.stringify({ name: username, ClientId: ClientId, NameEvent: "NameEvent" });
+            console.log("sending + " + jsonString);
+            connection.send(jsonString);
         }
 
         function showLobby() {
