@@ -112,6 +112,8 @@ public class App extends WebSocketServer {
     GameSession GS = null;
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
+    UserEvent U = gson.fromJson(message, UserEvent.class);
+
 
     // This is where all messages come in from the client. Different messages are
     // received based upon where
@@ -128,15 +130,32 @@ public class App extends WebSocketServer {
       // Put it in the lobby
       lobby.addPlayer(N.name, N.ClientId);
 
-    } else if (message.indexOf("something") > 0) {
+    } else if (message.indexOf("something") > 0) {  //do i change "something" to JoinGame? prof put it like that so i'm not sure if i should change it
       // here is where we get the information to join a game
       // need to call conn.setAttachment here and pass it the
       // GameSession object
+        //kawther notes : from tic tac toe
+        //ServerEvent E = new ServerEvent(); //added this bc i was getting errors on this; but isn't this logic incorrect? it's not supposed to be new server
+        //E.ClientId = GS.ClientId;   //changed it to name event bc it wasn't letting me get it from Game Session, caused error
+        //E.GameId = GS.GameId;
 
-    } else if (message.indexOf("aaaaa") > 0) {
+        conn.setAttachment(GS);
+
+        // Note only send to the single connection
+        String jsonString = gson.toJson(GS);
+        conn.send(jsonString);
+        System.out
+          .println("> " + Duration.between(startTime, Instant.now()).toMillis() + " " + connectionId + " "
+              + escape(jsonString));
+
+      // Update the running time
+      //stats.setRunningTime(Duration.between(startTime, Instant.now()).toSeconds());
+
+
+    } else if (message.indexOf("aaaaa") > 0) { //i'm not sure what to chang the "" to in the indexOf("aaaaa")
       // Get our Game Session
-      // Game G = conn.getAttachment();
-      // G.Update(U);
+      GS = conn.getAttachment();
+      GS.Update(U);
 
     }
 
