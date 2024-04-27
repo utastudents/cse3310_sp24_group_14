@@ -23,6 +23,10 @@ import java.time.Duration;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonParseException;
+
 public class App extends WebSocketServer {
 
   // All games currently underway on this server are stored in
@@ -100,8 +104,8 @@ public class App extends WebSocketServer {
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
     System.out.println(conn + " has closed");
     // Retrieve the game tied to the websocket connection
-    // Game G = conn.getAttachment();
-    // G = null;
+    GameSession GS = conn.getAttachment();
+    GS = null;
   }
 
   @Override
@@ -157,8 +161,8 @@ public class App extends WebSocketServer {
       GS = conn.getAttachment();
       GS.Update(U);
 
-    } else if (message.indexOf("StartGame") >= 0) {
-        // Start game when there are at least two players
+    } else if (message.indexOf("StartGame") > 0) {
+        // Start game when there are at least two players & max 4
         if (lobby.getPlayers().size() >= 2 && !GS.isFull() ) {
           GameSession G = conn.getAttachment(); //gets correct game for websocket
           if(G != null) {
@@ -167,8 +171,34 @@ public class App extends WebSocketServer {
             //lobby.clearPlayers();  // Should I remove players from the lobby because they're now in an active game?
           }
         }
-    } /* //already provided by prof in "aaaaa"
-      else if (message.indexOf("WordSelection") >= 0) { //when player is playing game/highlighting words
+    } else if(message.indexOf("ChatMessage") > 0) { //for chat feature
+        // getting sender and message content from JSON message
+        try {
+          JsonObject json = JsonParser.parseString(message).getAsJsonObject();
+          String sentBy = json.get("sentBy").getAsString();                     //getting player name
+          String chatContent = json.get("chatContent").getAsString();           //getting message they sent
+        
+          // Find out which player sent message
+          Player sender = null;
+          for (Player p : players) {
+            if (p.getNick().equals(sentBy)) {
+              sender = p;
+              break;
+            }
+          }
+
+          // Broadcast the message to all players in game
+          if (sender != null) {
+            Messaging.Broadcast(sender, players, chatContent);
+          }
+        } 
+        catch (JsonParseException e) {
+          System.err.println("Error with parsing the JSON message: " + e.getMessage());
+        }
+      }
+    
+    /* //already provided by prof in "aaaaa"
+      else if (message.indexOf("WordSelection") = 0) { //when player is playing game/highlighting words
         for (GameSession g : ActiveGames) {
           if (g.GameId == U.GameId) {
             g.Update(U);
