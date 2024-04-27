@@ -135,8 +135,8 @@ public class App extends WebSocketServer {
       // need to call conn.setAttachment here and pass it the
       // GameSession object
         //kawther notes : from tic tac toe
-        //ServerEvent E = new ServerEvent(); //added this bc i was getting errors on this; but isn't this logic incorrect? it's not supposed to be new server
-        //E.ClientId = GS.ClientId;   //changed it to name event bc it wasn't letting me get it from Game Session, caused error
+        //ServerEvent E = new ServerEvent(); 
+        //E.ClientId = GS.ClientId;   
         //E.GameId = GS.GameId;
 
         conn.setAttachment(GS);
@@ -152,13 +152,32 @@ public class App extends WebSocketServer {
       //stats.setRunningTime(Duration.between(startTime, Instant.now()).toSeconds());
 
 
-    } else if (message.indexOf("aaaaa") > 0) { //i'm not sure what to chang the "" to in the indexOf("aaaaa")
+    } else if (message.indexOf("aaaaa") > 0) { //i'm not sure what to change the "" to in the indexOf("aaaaa"); gets words player clicks
       // Get our Game Session
       GS = conn.getAttachment();
       GS.Update(U);
 
-    }
-
+    } else if (message.indexOf("StartGame") >= 0) {
+        // Start game when there are at least two players
+        if (lobby.getPlayers().size() >= 2 && !GS.isFull() ) {
+          GameSession G = conn.getAttachment(); //gets correct game for websocket
+          if(G != null) {
+            G.startGame();
+            ActiveGames.add(G);
+            //lobby.clearPlayers();  // Should I remove players from the lobby because they're now in an active game?
+          }
+        }
+    } /* //already provided by prof in "aaaaa"
+      else if (message.indexOf("WordSelection") >= 0) { //when player is playing game/highlighting words
+        for (GameSession g : ActiveGames) {
+          if (g.GameId == U.GameId) {
+            g.Update(U);
+            break;
+          }
+        }
+      
+      }
+      */
     // After the incoming messag is processed, we need to send updated
     // state information to all of the players. With what I know right now,
     // this consists of the "Lobby" and the "GameSession"
