@@ -57,8 +57,8 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            width: 50%;
-            height: 50%;
+            width: 31%;
+            height: 70%;
             margin: 10%;
         }
 
@@ -67,7 +67,7 @@
             position: absolute;
             top: 10%;
             left: 3%;
-            width: 15%;
+            width: 25%;
             height: 80%;
             border-radius: 20px;
             background-color: #c4c4c4;
@@ -91,7 +91,7 @@
             position: absolute;
             top: 10%;
             right: 3%;
-            width: 15%;
+            width: 25%;
             height: 80%;
             border-radius: 20px;
             background-color: #c4c4c4;
@@ -138,7 +138,7 @@
 
         .chat-container textarea {
             position: fixed;
-            width: 14%;
+            width: 24%;
             height: 18%;
             bottom: 15%;
             right: 3.5%;
@@ -179,14 +179,14 @@
 
         .back-button {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px 20px;
+            top: 2%;
+            left: 2%;
+            padding: 2px 4px;
             border: none;
             background-color: #ff4d4d;
             color: white;
-            font-size: 16px;
-            border-radius: 20px;
+            font-size: 18px;
+            border-radius: 16px;
             cursor: pointer;
             z-index: 2;
         }
@@ -245,7 +245,7 @@
 
         .game-content {
             position: relative;
-            background-color: #c4c4c4;
+            /* background-color: #c4c4c4; */
             /* padding: 20px; */
             border-radius: 10px;
             text-align: center;
@@ -264,6 +264,8 @@
             grid-template-rows: repeat(20, 1fr);
             border: 1px solid black;
             z-index: 4;
+            background-color: #c4c4c4;
+            border-radius: 5%;
         }
         .cell {
             position: relative;
@@ -273,6 +275,16 @@
             margin: 1%;
             border: #1a2a6c;
             color:#1a2a6c;
+        }
+
+        .bank-container {
+            position: absolute;
+            display: none;
+            width: 50%;
+            height: 25%;
+            right: 5%;
+            bottom: 20%;
+            background-color: #c4c4c4;
         }
         
 
@@ -311,8 +323,6 @@
                 <button class="ready-button" type="button" id="btn2" onclick="showGame()">Ready Player 2?</button>
                 <button class="ready-button" type="button" id="btn3" onclick="showGame()">Ready Player 3?</button>
                 <button class="ready-button" type="button" id="btn4" onclick="showGame()">Ready Player 4?</button>
-                <button class="ready-button" type="button" id="btn5" onclick="showGame()">Ready Player 5?</button>
-                <button class="ready-button" type="button" id="btn6" onclick="showGame()">Ready Player 6?</button>
             </div>
         </div>
 
@@ -334,11 +344,12 @@
             <div class="grid" id="wordGrid">
 
             </div>
-            <div id="wordBank">
-
+            <div id="bank-container" id="wordBank">
+                <h2>Word Bank:</h2>
             </div>
-            <div id="leaderBoard">
-
+            <div class="leaderboard-container" id="leaderboardStats">
+                <h2>TWSG Leaderboard</h2>
+    
             </div>
         </div>
     </div>
@@ -498,8 +509,10 @@
         function showGame() {
             document.getElementById("lobby").style.display = "none";
             document.getElementById("game").style.display = "flex";
-            generateWordGrid();
             document.getElementById("wordGrid").style.display = "flex";
+            document.getElementById("wordBank").style.display = "flex";
+            generateWordGrid();
+            populateLeaderboard();
 
             var username = document.getElementById("nick").value;
             var playing = "playing";
