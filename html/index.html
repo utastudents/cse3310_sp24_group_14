@@ -266,10 +266,10 @@
             z-index: 4;
         }
         .cell {
-            width: calc(100% / 20 - 10px); /* Adjusted width to fit 20 buttons in a row with a gap of 10px */
-            height: calc(100% / 20 - 10px); /* Adjusted height to fit 20 buttons in a column with a gap of 10px */
+            width: calc(100% / 20 - 10px);
+            height: calc(100% / 20 - 10px);
             padding: 0;
-            margin: 1%; /* Added margin to create a gap between buttons */
+            margin: 1%;
             border: #1a2a6c;
             color:#1a2a6c;
         }
@@ -389,7 +389,7 @@
 
                 // not sure of what to do here?  is something to be displayed?
                 var lobbyData = obj.Lobby; // Assuming Lobby object contains player usernames
-                showPlayerButtons(lobbyData);
+                //showPlayerButtons(lobbyData);
 
             }
 
@@ -427,15 +427,13 @@
 
         function showPlayerButtons(players) {
             var playerButtonsContainer = document.getElementById("playerButtons");
-            playerButtonsContainer.innerHTML = ""; // Clear previous buttons
+            playerButtonsContainer.innerHTML = "";
 
             players.forEach(function(player, index) {
                 var button = document.createElement("button");
                 button.classList.add("ready-button");
-                button.textContent = "Ready " + ClientId[index];; // Button text with player's username
-                // button.onclick = function() {
-                //     showGame(player); // Pass player's username to the showGame function
-                // };
+                button.textContent = "Ready " + ClientId[index];
+                
                 playerButtonsContainer.appendChild(button);
             });
         }
@@ -465,14 +463,10 @@
         }
 
         function generateWordGrid() {
-            // Define the size of the grid
             const numRows = 20;
             const numCols = 20;
 
-            // Get the grid container element
             const wordGrid = document.getElementById("wordGrid");
-
-            // Create the grid
             for (let row = 0; row < numRows; row++) {
                 for (let col = 0; col < numCols; col++) {
                     const cell = document.createElement("button");
