@@ -266,6 +266,7 @@
             z-index: 4;
         }
         .cell {
+            position: relative;
             width: calc(100% / 20 - 10px);
             height: calc(100% / 20 - 10px);
             padding: 0;
@@ -297,13 +298,9 @@
     </div>
 
     <div class="lobbyScreen" id="lobby">
-        <div class="leaderboard-container">
+        <div class="leaderboard-container" id="leaderboardStats">
             <h2>TWSG Leaderboard</h2>
-            <p>Player 1</p>
-            <p>Player 2</p>
-            <p>Player 3</p>
-            <p>Player 4</p>
-            <p>Player N</p>
+
         </div>
         <div class="lobby-content" id="lobbyContent">
             <button class="back-button" type="button" onclick="backToHome()">Back</button>
@@ -425,22 +422,33 @@
             connection.send(jsonString);
         }
 
-        function showPlayerButtons(players) {
+        //This was supposed to dynamically create and display buttons for each player
+        function showPlayerButtons(nick) {
             var playerButtonsContainer = document.getElementById("playerButtons");
             playerButtonsContainer.innerHTML = "";
 
             players.forEach(function(player, index) {
                 var button = document.createElement("button");
                 button.classList.add("ready-button");
-                button.textContent = "Ready " + ClientId[index];
+                button.textContent = "Ready " + nick;
                 
                 playerButtonsContainer.appendChild(button);
             });
         }
 
+        // this function is supposed to display a player's nick on the leaderboard
+        function populateLeaderboard() {
+            var username = document.getElementById("nick").value;
+            var leaderboardStats = document.getElementById("leaderboardStats");
+            var usernameElement = document.createElement("p");
+            usernameElement.textContent = username;
+            leaderboardStats.appendChild(usernameElement);
+        }
+
         function showLobby() {
             document.querySelector(".content").style.display = "none";
             document.getElementById("lobby").style.display = "flex";
+            populateLeaderboard();
         }
 
         function backToHome() {
@@ -462,6 +470,7 @@
             document.getElementById("lobby").style.display = "flex";
         }
 
+        // This function is supposed generate our grid of buttons
         function generateWordGrid() {
             const numRows = 20;
             const numCols = 20;
@@ -490,6 +499,7 @@
             document.getElementById("lobby").style.display = "none";
             document.getElementById("game").style.display = "flex";
             generateWordGrid();
+            document.getElementById("wordGrid").style.display = "flex";
 
             var username = document.getElementById("nick").value;
             var playing = "playing";
