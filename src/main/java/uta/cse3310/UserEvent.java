@@ -6,6 +6,7 @@ public class UserEvent {
     Player PlayerIdx; // either an XPLAYER or an OPLAYER
     Position Button1; // Starting position of word
     Position Button2; // ending position of grid
+    
 
     UserEvent() {
 

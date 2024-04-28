@@ -129,10 +129,10 @@ public class App extends WebSocketServer {
       NameEvent N = gson.fromJson(message, NameEvent.class);
 
       // Now we have a name
-      System.out.println(N.name);
+      System.out.println(N.username);
 
       // Put it in the lobby
-      lobby.addPlayer(N.name, N.ClientId);
+      lobby.addPlayer(N.username, N.ClientId);
 
     } else if (message.indexOf("something") > 0) {  //do i change "something" to JoinGame? prof put it like that so i'm not sure if i should change it
       // here is where we get the information to join a game
