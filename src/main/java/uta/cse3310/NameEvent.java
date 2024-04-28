@@ -1,7 +1,7 @@
 package uta.cse3310;
 
 public class NameEvent {
-    String name;
+    String username;
     Integer ClientId;
     String NameEvent;
 }

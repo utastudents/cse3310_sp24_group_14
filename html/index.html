@@ -59,7 +59,7 @@
             text-align: center;
             width: 50%;
             height: 50%;
-            margin: 10% auto;
+            margin: 10%;
         }
 
 
@@ -196,19 +196,23 @@
         }
 
 
-        .room-button {
+        .ready-button {
             padding: 5px 20px;
             border: none;
             margin: 10px;
-            background-color: #39aa73;
+            background-color: #da0000;
             color: white;
             font-size: 16px;
             border-radius: 20px;
             cursor: pointer;
         }
 
-        .room-button:hover {
-            background-color: #349b69;
+        .ready-button:hover {
+            background-color: #b90000;
+        }
+
+        .ready-button:clicked {
+            background-color: #39aa73;
         }
 
         .chat-button {
@@ -229,30 +233,10 @@
             background-color: #277ea1;
         }
 
-        .readyupScreen {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .gameScreen {
+            position: relative;
             width: 100%;
             height: 100%;
-            background-color: #b1b1b1(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1;
-        }
-
-        .readyup-content {
-            background-color: #c4c4c4;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-
-        .gameScreen {
-            position: absolute;
-            width: 100%;
-            height: 70%;
             background-color: #b1b1b1(0, 0, 0, 0.5);
             display: none;
             justify-content: center;
@@ -262,13 +246,36 @@
         .game-content {
             position: relative;
             background-color: #c4c4c4;
-            padding: 20px;
+            /* padding: 20px; */
             border-radius: 10px;
             text-align: center;
-            width: 80%;
-            height: 50%;
-            margin: 10% auto;
+            width: 90%;
+            height: 80%;
+            margin: 5%;
         }
+
+        .grid {
+            position: absolute;
+            display: grid;
+            width: 50%;
+            height: 50%;
+            right: 5%;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(20, 1fr);
+            border: 1px solid black;
+            z-index: 4;
+        }
+        .cell {
+            width: calc(100% / 20 - 10px); /* Adjusted width to fit 20 buttons in a row with a gap of 10px */
+            height: calc(100% / 20 - 10px); /* Adjusted height to fit 20 buttons in a column with a gap of 10px */
+            padding: 0;
+            margin: 1%; /* Added margin to create a gap between buttons */
+            border: #1a2a6c;
+            color:#1a2a6c;
+        }
+        
+
+
     </style>
 </head>
 
@@ -302,12 +309,14 @@
             <button class="back-button" type="button" onclick="backToHome()">Back</button>
             <h1>TheWordSearchGame Lobby</h1>
 
-            <button class="room-button" type="button" onclick="showReadyUp()">Room 1</button>
-            <button class="room-button" type="button" onclick="showReadyUp()">Room 2</button>
-            <button class="room-button" type="button" onclick="showReadyUp()">Room 3</button>
-            <button class="room-button" type="button" onclick="showReadyUp()">Room 4</button>
-            <button class="room-button" type="button" onclick="showReadyUp()">Room 5</button>
-            <button class="room-button" type="button" onclick="showReadyUp()">Room 6</button>
+            <div id="playerButtons" >
+                <button class="ready-button" type="button" id="btn1" onclick="showGame()">Ready Player 1?</button>
+                <button class="ready-button" type="button" id="btn2" onclick="showGame()">Ready Player 2?</button>
+                <button class="ready-button" type="button" id="btn3" onclick="showGame()">Ready Player 3?</button>
+                <button class="ready-button" type="button" id="btn4" onclick="showGame()">Ready Player 4?</button>
+                <button class="ready-button" type="button" id="btn5" onclick="showGame()">Ready Player 5?</button>
+                <button class="ready-button" type="button" id="btn6" onclick="showGame()">Ready Player 6?</button>
+            </div>
         </div>
 
         <div class="chat-container" id="chatBox">
@@ -320,22 +329,20 @@
         </div>
     </div>
 
-
-    <div class="readyupScreen" id="readyup">
-        <div class="readyup-content">
-            <button class="back-button" type="button" onclick="backToLobby()">Back</button>
-            <h1>Ready Up! 4 Players Required</h1>
-            <button class="room-button" type="button" onclick="showGame()">Ready Player 1</button>
-            <button class="room-button" type="button" onclick="showGame()">Ready Player 2</button>
-            <button class="room-button" type="button" onclick="showGame()">Ready Player 3</button>
-            <button class="room-button" type="button" onclick="showGame()">Ready Player 4</button>
-        </div>
-    </div>
-
     <div class="gameScreen" id="game">
         <div class="game-content">
             <h1>HappySearching!</h1>
             <button class="back-button" type="button" onclick="quitGame()">Quit Game</button>
+
+            <div class="grid" id="wordGrid">
+
+            </div>
+            <div id="wordBank">
+
+            </div>
+            <div id="leaderBoard">
+
+            </div>
         </div>
     </div>
 
@@ -381,6 +388,8 @@
             if ('Lobby' in obj) {
 
                 // not sure of what to do here?  is something to be displayed?
+                var lobbyData = obj.Lobby; // Assuming Lobby object contains player usernames
+                showPlayerButtons(lobbyData);
 
             }
 
@@ -416,26 +425,38 @@
             connection.send(jsonString);
         }
 
+        function showPlayerButtons(players) {
+            var playerButtonsContainer = document.getElementById("playerButtons");
+            playerButtonsContainer.innerHTML = ""; // Clear previous buttons
+
+            players.forEach(function(player, index) {
+                var button = document.createElement("button");
+                button.classList.add("ready-button");
+                button.textContent = "Ready " + ClientId[index];; // Button text with player's username
+                // button.onclick = function() {
+                //     showGame(player); // Pass player's username to the showGame function
+                // };
+                playerButtonsContainer.appendChild(button);
+            });
+        }
+
         function showLobby() {
-            // var username = 
-            // U = new UserEvent();
-            // U.playerIdx = "userInfo";
             document.querySelector(".content").style.display = "none";
             document.getElementById("lobby").style.display = "flex";
-            // document.getElementById("chatBox").style.display = "block";
-
-            // connection.send(JSON.stringify(U));
-            // console.log(JSON.stringify(U));
         }
 
         function backToHome() {
             document.querySelector(".content").style.display = "flex";
             document.getElementById("lobby").style.display = "none";
-        }
+            var username = document.getElementById("nick").value;
+            var leftlobby = "left lobby";
+            var status = {
+                name: username,
+                playerStatus: leftlobby
+            };
 
-        function showReadyUp() {
-            document.getElementById("lobby").style.display = "none";
-            document.getElementById("readyup").style.display = "flex";
+            console.log(status);
+            connection.send(JSON.stringify(status));
         }
 
         function backToLobby() {
@@ -443,15 +464,63 @@
             document.getElementById("lobby").style.display = "flex";
         }
 
+        function generateWordGrid() {
+            // Define the size of the grid
+            const numRows = 20;
+            const numCols = 20;
+
+            // Get the grid container element
+            const wordGrid = document.getElementById("wordGrid");
+
+            // Create the grid
+            for (let row = 0; row < numRows; row++) {
+                for (let col = 0; col < numCols; col++) {
+                    const cell = document.createElement("button");
+                    cell.classList.add("cell");
+                    cell.setAttribute("data-row", row);
+                    cell.setAttribute("data-col", col);
+                    cell.textContent = "X";
+                    
+                    cell.addEventListener("click", function() {
+                        const row = this.getAttribute("data-row");
+                        const col = this.getAttribute("data-col");
+                        console.log("Clicked cell at row: " + row + ", column: " + col);
+                    });
+                    
+                    wordGrid.appendChild(cell);
+                }
+            }
+        }
+
         function showGame() {
-            document.getElementById("readyup").style.display = "none";
+            document.getElementById("lobby").style.display = "none";
             document.getElementById("game").style.display = "flex";
+            generateWordGrid();
+
+            var username = document.getElementById("nick").value;
+            var playing = "playing";
+            var status = {
+                name: username,
+                playerStatus: playing
+            };
+
+            console.log(status);
+            connection.send(JSON.stringify(status));
         }
 
         function quitGame() {
             document.getElementById("game").style.display = "none";
-            document.getElementById("readyup").style.display = "none";
             document.getElementById("lobby").style.display = "flex";
+            var username = document.getElementById("nick").value;
+            var quit = "quit";
+            var status = {
+                name: username,
+                playerStatus: quit
+            };
+
+            console.log(status);
+            connection.send(JSON.stringify(status));
+
         }
 
         function sendMessage() {
@@ -469,6 +538,7 @@
                 message: message
             };
 
+            console.log(messageData);
             connection.send(JSON.stringify(messageData));
 
         }
