@@ -57,12 +57,13 @@ public class App extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         System.out.println(conn + " has closed");
         Player disconnectedPlayer = activeConnections.remove(conn);
-        System.out.println(disconnectedPlayer + " removed");
+        lobby.removePlayerFromLobby(disconnectedPlayer);
+        broadcastPlayerLeft(disconnectedPlayer); // Notify all players about the player who left
+        System.out.println(disconnectedPlayer.getUsername() + " disconnected");
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        Gson gson = new Gson();
         JsonObject messageObject = JsonParser.parseString(message).getAsJsonObject();
 
         String action = messageObject.get("action").getAsString();
@@ -70,13 +71,7 @@ public class App extends WebSocketServer {
         JsonObject response = new JsonObject();
         switch (action) {
             case "enterLobby":
-                String username = messageObject.get("username").getAsString();
-
-                Player player = activeConnections.get(conn);
-                if (player != null) {
-                    player.setUsername(username);
-                    sendLobbyInfo(conn);
-                }
+                handleEnterLobby(conn, messageObject);
                 break;
             case "sendMessage":
                 handleSendMessage(conn, messageObject);
@@ -84,6 +79,33 @@ public class App extends WebSocketServer {
 
         }
 
+    }
+
+    private void broadcastPlayerLeft(Player player) {
+        Gson gson = new Gson();
+        JsonObject message = new JsonObject();
+        message.addProperty("action", "playerLeft");
+        message.addProperty("username", player.getUsername());
+        broadcast(gson.toJson(message)); // Broadcast the player left message to all clients
+    }
+
+    private void handleEnterLobby(WebSocket conn, JsonObject messageObject) {
+        String username = messageObject.get("username").getAsString();
+        Player player = activeConnections.get(conn);
+        if (player != null) {
+            player.setUsername(username);
+            lobby.addPlayerToLobby(player); // Add player to active lobby list
+            sendLobbyInfo(conn, player.getUsername());
+            broadcastPlayerJoined(player); // Notify all players about the new player
+        }
+    }
+
+    private void broadcastPlayerJoined(Player player) {
+        Gson gson = new Gson();
+        JsonObject joinMessage = new JsonObject();
+        joinMessage.addProperty("action", "playerJoined");
+        joinMessage.addProperty("username", player.getUsername());
+        broadcast(gson.toJson(joinMessage));
     }
 
     private void handleSendMessage(WebSocket conn, JsonObject messageObject) {
@@ -113,17 +135,19 @@ public class App extends WebSocketServer {
 
     // Utility to broadcast messages to all connected clients
     public void broadcast(String message) {
-        activeConnections.forEach((socket, player) -> {
-            if (socket.isOpen()) {
+        for (WebSocket socket : activeConnections.keySet()) {
+            Player player = activeConnections.get(socket);
+            if (socket.isOpen() && player.isInLobby()) {
                 socket.send(message);
             }
-        });
+        }
     }
 
-    private void sendLobbyInfo(WebSocket conn) {
+    private void sendLobbyInfo(WebSocket conn, String username) {
         Gson gson = new Gson();
         JsonObject response = new JsonObject();
         response.addProperty("action", "enterLobby");
+        response.addProperty("username", username);
 
         // Information about the games in the lobby
         JsonArray gamesInfo = new JsonArray();
@@ -158,6 +182,15 @@ public class App extends WebSocketServer {
             leaderboardInfo.add(playerInfo);
         }
         response.add("leaderboard", leaderboardInfo);
+
+        // Including active players in the lobby
+        JsonArray activePlayers = new JsonArray();
+        for (Player player : lobby.getActivePlayers()) {
+            JsonObject playerInfo = new JsonObject();
+            playerInfo.addProperty("username", player.getUsername());
+            activePlayers.add(playerInfo);
+        }
+        response.add("activePlayers", activePlayers);
 
         // Send the constructed lobby information to the client
         conn.send(gson.toJson(response));
