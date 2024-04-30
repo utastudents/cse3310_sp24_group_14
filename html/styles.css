@@ -1,0 +1,280 @@
+
+*{
+    box-sizing: border-box;  /* Includes padding and border in the element's total width and height */
+    margin: 0;
+    padding: 0;
+}
+#mainContent .hidden {
+    display: none;
+}
+
+
+@keyframes backgroundAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#homepage {
+    text-align: center;
+    position: relative;
+    color: #ddd;
+}
+
+#mainContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 40px; /* Acts as the outer margin for lobbyPage */
+    background: linear-gradient(270deg, #1a2a6c, #b21f1f, #fdbb2d);
+    background-size: 600% 600%;
+    animation: backgroundAnimation 10s ease infinite;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden; /* Ensures no overflow due to internal content */
+}
+
+#lobbyPage {
+    display: flex;
+    align-items: stretch;
+    height: 100%;  /* Fill the height of its container */
+    width: 100%;   /* Fill the width of its container */
+    gap: 10px;     /* Space between flex items */
+    padding: 40px; /* Padding inside the lobbyPage, if needed */
+    overflow: hidden; /* Ensures no overflow */
+}
+
+.leaderboard-container, .games-container, .chat-container {
+    background-color: rgb(241, 251, 253);
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    overflow: hidden;
+}
+
+.leaderboard-container, .chat-container {
+    flex: 2;  /* 20% of the available space */
+}
+
+.games-container {
+    flex: 6;  /* 60% of the available space */
+}
+
+
+/* ------- Chat container css -------- */
+
+/* General chat container styling */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;  /* Full height of its parent container */
+    background-color: #c3d3dd;  /* Light grey background */
+    border-radius: 8px;  /* Rounded corners for the chat box */
+    padding: 10px;  /* Padding around the chat content */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+}
+
+/* Styling for the chat title */
+h2 {
+    margin: 0;
+    padding: 8px 10px; /* Padding for the title */
+    border-bottom: 1px solid #ccc; /* Line under the title for separation */
+}
+
+/* Container for messages */
+.messagesContainer {
+    flex-grow: 1;  /* Allows this container to take up all available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Aligns messages to the bottom */
+    overflow-y: auto;  /* Allow scrolling for overflowed text */
+    padding: 0 5px;  /* Padding only on the sides for aesthetics */
+}
+
+/* Individual message bubbles */
+.messageBubble {
+    background-color: #ffffff;  /* White background for message bubbles */
+    border-radius: 15px;  /* Rounded bubble corners */
+    padding: 8px 12px;  /* Padding inside message bubbles */
+    margin: 5px 0;  /* Space between messages */
+    max-width: 80%;  /* Maximum width of a message bubble */
+    word-wrap: break-word;  /* Ensures long words do not overflow */
+}
+
+/* Right-align messages sent by the user */
+.messageBubble.self {
+    margin-left: auto;  /* Pushes the bubble to the right */
+    background-color: #dcf8c6;  /* Light green background for user's messages */
+}
+
+.sender {
+    font-weight: bold;  /* Bold for the sender's name */
+    margin-bottom: 2px;  /* Space between sender's name and message */
+}
+
+.message {
+    line-height: 1.4;  /* Improved line height for better readability */
+}
+
+/* Message input area styling */
+.messageInputContainer {
+    display: flex;
+    padding: 10px;
+}
+
+.messageTextbox {
+    flex: 1;  /* Takes up the majority of the input area */
+    border-radius: 20px;  /* Rounded corners for the input box */
+    border: 1px solid #ccc;  /* Subtle border for the input */
+    padding: 8px;  /* Padding inside the input box */
+    resize: none;  /* Disables resizing of the textarea */
+}
+
+#sendMessageButton {
+    background-color: #4CAF50;  /* Green background color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-left: 8px;  /* Space between the textarea and button */
+    border-radius: 20px;  /* Rounded corners for the button */
+    cursor: pointer;
+}
+
+#sendMessageButton:hover {
+    background-color: #45a049;  /* Slightly darker green on hover */
+}
+
+
+
+/* ---- Leaderboard styling ------ */
+.leaderboard-container {
+}
+
+/* Styling for the leaderboard headers */
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;  /* Distributes space evenly between the headers */
+    margin: 10px 0;  /* Adds space between the header and the player list */
+    padding-bottom: 5px;  /* Padding below the header */
+}
+
+.leaderboard-header-player, .leaderboard-header-score {
+    margin: 0;
+    font-weight: bold;  /* Makes header text bold */
+    color: #333;  /* Dark color for better readability */
+}
+
+/* Styling for individual player score entries */
+.leaderboard-content {
+    display: flex;
+    justify-content: space-between;  /* Aligns player name and score on opposite ends */
+    padding: 5px 0;  /* Padding for each entry for vertical rhythm */
+}
+
+/* Enhancing readability */
+.leaderboard-player {
+    flex: 3;  /* Allows more space for player names if needed */
+}
+
+.leaderboard-score {
+    flex: 1;
+    text-align: right;  /* Aligns score to the right for a tidy look */
+}
+
+
+
+
+/* Rooms content container CSS */
+
+.games-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    background: #f5f5f5;
+}
+
+.active-players, .games-list, .game-creation {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.player-bubble {
+    display: inline-block;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.game-creation {
+    display: flex;
+    align-items: center;  /* Align items vertically */
+    gap: 10px;  /* Space between items */
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.game-creation input[type="text"] {
+    flex-grow: 1;  /* Allows the text input to take up remaining space */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.game-creation label {
+    margin: 0;
+    white-space: nowrap;  /* Prevents labels from wrapping */
+}
+
+.game-creation input[type="radio"] {
+    margin-right: 5px;  /* Space before the label text */
+}
+
+.game-creation button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.game-creation button:hover {
+    background-color: #45a049;
+}
+.games-list .game-entry {
+    background-color: #e9e9e9;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Space between game entries */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.games-list .game-entry button {
+    padding: 5px 10px;
+    background-color: #3174f1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.games-list .game-entry button:hover {
+    background-color: #275cbf;
+}

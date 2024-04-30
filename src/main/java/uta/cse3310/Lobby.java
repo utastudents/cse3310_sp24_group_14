@@ -1,43 +1,56 @@
 package uta.cse3310;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class Lobby {
-    private List<String> players;
-    private static final int MAX_PLAYERS = 4; // Maximum players allowed in the lobby
-    private boolean gameStarted;
-    private String Lobby; // This is a hack to id the messages....
+    private List<Game> games;
+    private Leaderboard leaderboard;
+    private Chatroom globalChatroom;
 
     public Lobby() {
-        this.players = new ArrayList<>();
-        this.gameStarted = false;
+        this.games = new ArrayList<>();
+        this.leaderboard = new Leaderboard();
+        this.globalChatroom = new Chatroom();
     }
 
-    public boolean addPlayer(String playerName, Integer ID) {
-        // Need to store the client ID in the lobby with the name.
-        // It will be needed later on.
-        if (players.size() < MAX_PLAYERS) {
-            players.add(playerName);
-            return true;
-        } else {
-            return false; // Lobby is full
+    public Game createGame(String name, int maxPlayers) {
+        Optional<Game> existingGame = findGameByName(name);
+        if (existingGame.isPresent()) {
+            throw new IllegalArgumentException("Game with name " + name + " already exists.");
         }
+        Game newGame = new Game(name, maxPlayers);
+        games.add(newGame);
+        return newGame;
     }
 
-    public void removePlayer(String playerName) {
-        players.remove(playerName);
+    public boolean joinGame(String name, Player player) {
+        Optional<Game> game = findGameByName(name);
+        if (game.isPresent() && !game.get().isFull()) {
+            game.get().addPlayer(player);
+            return true;
+        }
+        return false;
     }
 
-    public List<String> getPlayers() {
-        return players;
+    public List<Game> getGames() {
+        return new ArrayList<>(games);  
     }
 
-    public boolean isGameStarted() {
-        return gameStarted;
+    public Chatroom getGlobalChatroom() {
+        return this.globalChatroom;
     }
 
-    public void setGameStarted(boolean gameStarted) {
-        this.gameStarted = gameStarted;
+    private Optional<Game> findGameByName(String name) {
+        return games.stream()
+                .filter(game -> game.getName().equals(name))
+                .findFirst();
+    }
+
+
+    public Leaderboard getLeaderboard() {
+        return this.leaderboard;  
     }
 }
