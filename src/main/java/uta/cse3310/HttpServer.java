@@ -19,6 +19,7 @@ public class HttpServer {
     private static final String HTML = "./html";
     int port = 8080;
     String dirname = HTML;
+    HTTPServer server;
 
     public HttpServer(int portNum, String dirName) {
         port = portNum;
@@ -31,7 +32,7 @@ public class HttpServer {
             if (!dir.canRead())
                 throw new FileNotFoundException(dir.getAbsolutePath());
             // set up server
-            HTTPServer server = new HTTPServer(port);
+            this.server = new HTTPServer(port);
             VirtualHost host = server.getVirtualHost(null); // default host
             host.setAllowGeneratedIndex(true); // with directory index pages
             host.addContext("/", new FileContextHandler(dir));
@@ -48,6 +49,13 @@ public class HttpServer {
             System.err.println("error: " + e);
         }
 
+    }
+
+    public void stop() throws IOException {
+        if (server != null) {
+            server.stop();
+            System.out.println("HTTP Server stopped on port: " + port);
+        }
     }
 
 }

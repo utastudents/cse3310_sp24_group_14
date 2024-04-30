@@ -1,566 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheWordSearchGame</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        @keyframes backgroundAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        body {
-            background: linear-gradient(270deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-size: 600% 600%;
-            animation: backgroundAnimation 10s ease infinite;
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .content {
-            text-align: center;
-            position: relative;
-            color: #ddd;
-        }
-
-        .lobbyScreen {
-            position: relative;
-            /* top: 0;
-            left: 0; */
-            width: 100%;
-            height: 100%;
-            background-color: #b1b1b1(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            z-index: 1;
-        }
-
-        .lobby-content {
-            position: relative;
-            background-color: #c4c4c4;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 31%;
-            height: 70%;
-            margin: 10%;
-        }
-
-
-        .leaderboard-container {
-            position: absolute;
-            top: 10%;
-            left: 3%;
-            width: 25%;
-            height: 80%;
-            border-radius: 20px;
-            background-color: #c4c4c4;
-            padding: 10px;
-            z-index: 1;
-        }
-
-        .leaderboard-content {
-            position: absolute;
-            float: left;
-            top: 20%;
-            left: 50px;
-            border: 20px;
-            background-color: #c4c4c4;
-            padding: 5px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .chat-container {
-            position: absolute;
-            top: 10%;
-            right: 3%;
-            width: 25%;
-            height: 80%;
-            border-radius: 20px;
-            background-color: #c4c4c4;
-            padding: 10px;
-            overflow: auto;
-            z-index: 1;
-        }
-
-        .chat-content {
-            position: relative;
-            background-color: #c4c4c4;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 50%;
-            height: 50%;
-
-            margin: 10% auto;
-        }
-
-
-        .contact-button {
-            background-color: #349b69;
-            position: absolute;
-            top: 20%;
-            right: 10%;
-            width: 80%;
-            padding: 5px 20px;
-            border: none;
-            background-color: #398aaa;
-            color: white;
-            font-size: 16px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .contact-button:hover {
-            background-color: #349b69;
-        }
-
-        .selected-contact {
-            background-color: #3b6e55;
-        }
-
-        .chat-container textarea {
-            position: fixed;
-            width: 24%;
-            height: 18%;
-            bottom: 15%;
-            right: 3.5%;
-            padding: 10px;
-            margin: 2px 0 15px 0;
-            border: auto;
-            border-radius: 20px;
-            background: #c4c4c4;
-            resize: none;
-            max-height: 5%;
-        }
-
-        .chat-container textarea:focus {
-            background-color: #ddd;
-            outline: none;
-        }
-
-        .enter-button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #39aa73;
-            color: white;
-            font-size: 16px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .enter-button:hover {
-            background-color: #349b69;
-        }
-
-        .button-container {
-            position: relative;
-            display: flex;
-            z-index: 2;
-        }
-
-
-        .back-button {
-            position: absolute;
-            top: 2%;
-            left: 2%;
-            padding: 2px 4px;
-            border: none;
-            background-color: #ff4d4d;
-            color: white;
-            font-size: 18px;
-            border-radius: 16px;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        .back-button:hover {
-            background-color: #ff3e3e;
-        }
-
-
-        .ready-button {
-            padding: 5px 20px;
-            border: none;
-            margin: 10px;
-            background-color: #da0000;
-            color: white;
-            font-size: 16px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .ready-button:hover {
-            background-color: #b90000;
-        }
-
-        .ready-button:clicked {
-            background-color: #39aa73;
-        }
-
-        .chat-button {
-            position: absolute;
-            bottom: 5%;
-            right: 10%;
-            width: 80%;
-            padding: 5px 20px;
-            border: none;
-            background-color: #398aaa;
-            color: white;
-            font-size: 16px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-
-        .chat-button:hover {
-            background-color: #277ea1;
-        }
-
-        .gameScreen {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-color: #b1b1b1(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            z-index: 1;
-        }
-
-        .game-content {
-            position: relative;
-            /* background-color: #c4c4c4; */
-            /* padding: 20px; */
-            border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            height: 80%;
-            margin: 5%;
-        }
-
-        .grid {
-            position: absolute;
-            display: grid;
-            width: 50%;
-            height: 50%;
-            right: 5%;
-            grid-template-columns: repeat(20, 1fr);
-            grid-template-rows: repeat(20, 1fr);
-            border: 1px solid black;
-            z-index: 4;
-            background-color: #c4c4c4;
-            border-radius: 5%;
-        }
-        .cell {
-            position: relative;
-            width: calc(100% / 20 - 10px);
-            height: calc(100% / 20 - 10px);
-            padding: 0;
-            margin: 1%;
-            border: #1a2a6c;
-            color:#1a2a6c;
-        }
-
-        .bank-container {
-            position: absolute;
-            display: none;
-            width: 50%;
-            height: 25%;
-            right: 5%;
-            bottom: 20%;
-            background-color: #c4c4c4;
-        }
-        
-
-
-    </style>
-</head>
-
-<!-- div stuff goes here (content that will actually get displayed) -->
-
-<body>
-    <div class="content">
-        <h1>TheWordSearchGame</h1>
-
-        <div id="wordGrid"></div>
-
-        <label id="topMessage"></label>
-
-        <p>Enter your user name</p>
-
-        <input type="text" id="nick"><br><br>
-        <button class="enter-button" type="button" onclick="userName(); showLobby();">Enter Lobby</button>
-
-    </div>
-
-    <div class="lobbyScreen" id="lobby">
-        <div class="leaderboard-container" id="leaderboardStats">
-            <h2>TWSG Leaderboard</h2>
-
-        </div>
-        <div class="lobby-content" id="lobbyContent">
-            <button class="back-button" type="button" onclick="backToHome()">Back</button>
-            <h1>TheWordSearchGame Lobby</h1>
-
-            <div id="playerButtons" >
-                <button class="ready-button" type="button" id="btn1" onclick="showGame()">Ready Player 1?</button>
-                <button class="ready-button" type="button" id="btn2" onclick="showGame()">Ready Player 2?</button>
-                <button class="ready-button" type="button" id="btn3" onclick="showGame()">Ready Player 3?</button>
-                <button class="ready-button" type="button" id="btn4" onclick="showGame()">Ready Player 4?</button>
-            </div>
-        </div>
-
-        <div class="chat-container" id="chatBox">
-            <h2>
-                <center>Global Chat</center>
-            </h2>
-
-            <textarea placeholder="Your Message" name="msg" required></textarea>
-            <button class="chat-button" type="button" onclick="sendMessage()">Send Message</button>
-        </div>
-    </div>
-
-    <div class="gameScreen" id="game">
-        <div class="game-content">
-            <h1>HappySearching!</h1>
-            <button class="back-button" type="button" onclick="quitGame()">Quit Game</button>
-
-            <div class="grid" id="wordGrid">
-
-            </div>
-            <div id="bank-container" id="wordBank">
-                <h2>Word Bank:</h2>
-            </div>
-            <div class="leaderboard-container" id="leaderboardStats">
-                <h2>TWSG Leaderboard</h2>
-    
-            </div>
-        </div>
-    </div>
-
-    <script>
-        var ClientId; // This is an ID from the server, value of 1 to N.  It is unique to this client
-        var playerIdx = "nick";
-        var gameId = -1;
-        class UserEvent {
-            // Button = -1;
-            playerIdx = "nick";
-            gameId = 0;
-        }
-        var connection = null;
-
-        var serverUrl;
-        serverUrl = "ws://" + window.location.hostname + ":" + (parseInt(location.port) + 100);
-        connection = new WebSocket(serverUrl); // this wobsocket is working now!
-
-        connection.onopen = function (evt) {
-            console.log("open");
-        }
-
-        connection.onclose = function (evt) {
-            console.log("close");
-            document.getElementById("topMessage").innerHTML = "Server Offline"
-        }
-
-        connection.onmessage = function (evt) {
-            var msg = evt.data;
-            console.log("Message received: " + msg);
-            const obj = JSON.parse(msg);
-
-            // Only a couple of different messages can arrive here.
-            // let's make a block of code to handle each of them.
-
-            // Placing the name of the class in the class is a hack,
-            // but it makes this code more deliberate
-            if ('ServerEvent' in obj) {
-                ClientId = obj.ClientId;
-                // gameId may not have a valid value at this time...
-                gameId = obj.ClientId;
-            }
-            if ('Lobby' in obj) {
-
-                // not sure of what to do here?  is something to be displayed?
-                var lobbyData = obj.Lobby; // Assuming Lobby object contains player usernames
-                //showPlayerButtons(lobbyData);
-
-            }
-
-        }
-
-        // function renderWordGrid(wordGrid) {
-        //     var gridHtml = "<table>";
-        //     for (var i = 0; i < wordGrid.length; i++) {
-        //         gridHtml += "<tr>";
-        //         for (var j = 0; j < wordGrid[i].length; j++) {
-        //             gridHtml += "<td><button id='b" + (i * wordGrid.length + j) + "' onclick='buttonClick(" + i + "," + j + ")'>" + wordGrid[i][j] + "</button></td>";
-        //         }
-        //         gridHtml += "</tr>";
-        //     }
-        //     gridHtml += "</table>";
-        //     document.getElementById("wordGrid").innerHTML = gridHtml;
-        // }
-
-        // function buttonClick(row, col) {
-        //     var position = { "row": row, "col": col };
-        //     connection.send(JSON.stringify(position));
-        // }
-
-        function userName() {
-            var username = document.getElementById("nick").value;
-            if (username == "") {
-                alert('You must enter a user name to enter the game lobby');
-                return;
-            }
-
-            jsonString = JSON.stringify({ name: username, ClientId: ClientId, NameEvent: "NameEvent" });
-            console.log("sending + " + jsonString);
-            connection.send(jsonString);
-        }
-
-        //This was supposed to dynamically create and display buttons for each player
-        function showPlayerButtons(nick) {
-            var playerButtonsContainer = document.getElementById("playerButtons");
-            playerButtonsContainer.innerHTML = "";
-
-            players.forEach(function(player, index) {
-                var button = document.createElement("button");
-                button.classList.add("ready-button");
-                button.textContent = "Ready " + nick;
-                
-                playerButtonsContainer.appendChild(button);
-            });
-        }
-
-        // this function is supposed to display a player's nick on the leaderboard
-        function populateLeaderboard() {
-            var username = document.getElementById("nick").value;
-            var leaderboardStats = document.getElementById("leaderboardStats");
-            var usernameElement = document.createElement("p");
-            usernameElement.textContent = username + ": Score = ";
-            leaderboardStats.appendChild(usernameElement);
-        }
-
-        function showLobby() {
-            document.querySelector(".content").style.display = "none";
-            document.getElementById("lobby").style.display = "flex";
-            populateLeaderboard();
-        }
-
-        function backToHome() {
-            document.querySelector(".content").style.display = "flex";
-            document.getElementById("lobby").style.display = "none";
-            var username = document.getElementById("nick").value;
-            var leftlobby = "left lobby";
-            var status = {
-                name: username,
-                playerStatus: leftlobby
-            };
-
-            console.log(status);
-            connection.send(JSON.stringify(status));
-        }
-
-        function backToLobby() {
-            document.getElementById("readyup").style.display = "none";
-            document.getElementById("lobby").style.display = "flex";
-        }
-
-        // This function is supposed generate our grid of buttons
-        function generateWordGrid() {
-            const numRows = 20;
-            const numCols = 20;
-
-            const wordGrid = document.getElementById("wordGrid");
-            for (let row = 0; row < numRows; row++) {
-                for (let col = 0; col < numCols; col++) {
-                    const cell = document.createElement("button");
-                    cell.classList.add("cell");
-                    cell.setAttribute("data-row", row);
-                    cell.setAttribute("data-col", col);
-                    cell.textContent = "X";
-                    
-                    cell.addEventListener("click", function() {
-                        const row = this.getAttribute("data-row");
-                        const col = this.getAttribute("data-col");
-                        console.log("Clicked cell at row: " + row + ", column: " + col);
-                    });
-                    
-                    wordGrid.appendChild(cell);
-                }
-            }
-        }
-
-        function showGame() {
-            document.getElementById("lobby").style.display = "none";
-            document.getElementById("game").style.display = "flex";
-            document.getElementById("wordGrid").style.display = "flex";
-            document.getElementById("wordBank").style.display = "flex";
-            generateWordGrid();
-            populateLeaderboard();
-
-            var username = document.getElementById("nick").value;
-            var playing = "playing";
-            var status = {
-                name: username,
-                playerStatus: playing
-            };
-
-            console.log(status);
-            connection.send(JSON.stringify(status));
-        }
-
-        function quitGame() {
-            document.getElementById("game").style.display = "none";
-            document.getElementById("lobby").style.display = "flex";
-            var username = document.getElementById("nick").value;
-            var quit = "quit";
-            var status = {
-                name: username,
-                playerStatus: quit
-            };
-
-            console.log(status);
-            connection.send(JSON.stringify(status));
-
-        }
-
-        function sendMessage() {
-            var username = document.getElementById("nick").value;
-            var message = document.querySelector("#chatBox textarea").value;
-            var formattedMessage = username + ": " + message;
-            var chatBox = document.getElementById("chatBox");
-            var messageElement = document.createElement("p");
-            messageElement.textContent = formattedMessage;
-            chatBox.appendChild(messageElement);
-            document.querySelector("#chatBox textarea").value = "";
-
-            var messageData = {
-                name: username,
-                message: message
-            };
-
-            console.log(messageData);
-            connection.send(JSON.stringify(messageData));
-
-        }
-
-    </script>
-</body>
-
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TheWordSearchGame</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="styles.css" />
+		<!-- Path to your CSS file -->
+	</head>
+
+	<!-- div stuff goes here (content that will actually get displayed) -->
+
+	<body id="mainContent" style="display: none">
+		<div id="homepage">
+			<h1>TheWordSearchGame</h1>
+
+			<div id="wordGrid"></div>
+
+			<label id="topMessage"></label>
+
+			<p>Enter your user name</p>
+
+			<input type="text" id="username" /><br /><br />
+			<button class="enterLobby" type="button">Enter Lobby</button>
+		</div>
+
+		<div class="hidden" id="lobbyPage">
+			<div class="leaderboard-container" id="leaderboardStats">
+				<h2>TWSG Leaderboard</h2>
+				<div class="leaderboard-header">
+					<p class="leaderboard-header-player">Player</p>
+					<p class="leaderboard-header-score">Score</p>
+				</div>
+				<div class="leaderboard-content">
+					<p class="leaderboard-player">manish</p>
+					<p class="leaderboard-score">23</p>
+				</div>
+				<div class="leaderboard-content">
+					<p class="leaderboard-player">digs</p>
+					<p class="leaderboard-score">33</p>
+				</div>
+			</div>
+			<div class="games-container" id="lobbyContent">
+				<h2>TheWordSearchGame Lobby</h2>
+
+				<!-- Active Players List -->
+				<div class="active-players">
+					<h3>Active Players</h3>
+					<div class="player-bubble">Alice</div>
+					<div class="player-bubble">Bob</div>
+					<div class="player-bubble">Charlie</div>
+				</div>
+
+				<!-- Game Creation Form -->
+				<div class="game-creation">
+					<input type="text" placeholder="Room Name" id="roomName" />
+					<label><input type="radio" name="roomSize" value="2" /> 2</label>
+					<label><input type="radio" name="roomSize" value="3" /> 3</label>
+					<label><input type="radio" name="roomSize" value="4" /> 4</label>
+					<label><input type="radio" name="roomSize" value="5" /> 5</label>
+					<button id="createGame">Create Game</button>
+				</div>
+
+				<!-- List of Games -->
+				<div class="games-list">
+					<h3>Available Games</h3>
+					<div class="game-entry">
+						<span>Game One - 2/4</span>
+						<button onclick="joinGame('Game One')">Join</button>
+					</div>
+					<div class="game-entry">
+						<span>Game Two - 3/5</span>
+						<button onclick="joinGame('Game Two')">Join</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="chat-container" id="chatBox">
+				<h2>Global Chat</h2>
+				<div class="messagesContainer">
+					<div class="messageBubble">
+						<div class="sender">manish</div>
+						<div class="message">whats up guys</div>
+					</div>
+					<div class="messageBubble">
+						<div class="sender">diganta</div>
+						<div class="message">not much</div>
+					</div>
+				</div>
+				<div class="messageInputContainer">
+					<textarea
+						class="messageTextbox"
+						placeholder="Your Message"
+						name="messageTextbox"
+						required
+					></textarea>
+					<button id="sendMessageButton" type="button">Send Message</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="hidden" id="gamePage">
+			<div class="game-content">
+				<h1>HappySearching!</h1>
+				<button class="back-button" type="button" onclick="quitGame()">
+					Quit Game
+				</button>
+
+				<div class="grid" id="wordGrid"></div>
+				<div id="bank-container" id="wordBank">
+					<h2>Word Bank:</h2>
+				</div>
+				<div class="leaderboard-container" id="leaderboardStats">
+					<h2>TWSG Leaderboard</h2>
+				</div>
+			</div>
+		</div>
+
+		<script src="App.js"></script>
+		<script src="home.js"></script>
+		<script src="lobby.js"></script>
+		<!-- <script src="ready.js"></script> -->
+		<!-- <script src="game.js"></script> -->
+	</body>
 </html>
