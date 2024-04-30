@@ -40,6 +40,14 @@ class App {
 				break;
 			case "updateChat":
 				this.updateChat(data);
+			case "playerJoined":
+				if (data.username != this.userSession.username) {
+					this.lobby.updateActivePlayersDisplay([{ username: data.username }]);
+				}
+				break;
+			case "playerLeft":
+				this.lobby.removeActivePlayer(data.username);
+				break;
 		}
 	}
 
@@ -51,12 +59,16 @@ class App {
 
 	enterLobby(data) {
 		this.lobby = new Lobby(this);
+		this.userSession.username = data.username;
 		if (data) {
 			// if (data.games) {
 			// 	this.lobby.updateLobbyDisplay(data.games);
 			// }
 			if (data.chatMessages) {
 				this.lobby.updateChatDisplay(data.chatMessages);
+			}
+			if (data.activePlayers) {
+				this.lobby.updateActivePlayersDisplay(data.activePlayers);
 			}
 			// if (data.leaderboard) {
 			// 	this.lobby.updateLeaderboardDisplay(data.leaderboard);

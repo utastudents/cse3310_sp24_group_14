@@ -7,6 +7,7 @@ class Lobby {
 		this.sendButton = document.getElementById("sendMessageButton");
 
 		this.sendButton.addEventListener("click", () => this.sendMessage());
+		this.activePlayersDiv = document.querySelector(".active-players"); // Make sure this exists in your HTML
 
 		this.showLobbyDisplay();
 	}
@@ -23,6 +24,35 @@ class Lobby {
 			gameElement.innerHTML = `Game: ${game.gameName} (${game.numPlayers}/${game.maxPlayers}) - ${game.status}`;
 			this.lobbyDiv.appendChild(gameElement);
 		});
+	}
+
+	removeActivePlayer(username) {
+		const players = this.activePlayersDiv.querySelectorAll(".player-bubble");
+		players.forEach((playerDiv) => {
+			if (playerDiv.textContent === username) {
+				this.activePlayersDiv.removeChild(playerDiv);
+			}
+		});
+	}
+
+	updateActivePlayersDisplay(activePlayers) {
+		// Add each active player to the active players list in the lobby UI
+		activePlayers.forEach((player) => {
+			const playerBubble = document.createElement("div");
+			playerBubble.className = "player-bubble";
+			playerBubble.textContent = player.username; // assuming the username property exists
+			this.activePlayersDiv.appendChild(playerBubble);
+		});
+	}
+
+	updateActivePlayers(playerName) {
+		// Check if the activePlayersDiv is present
+		if (this.activePlayersDiv) {
+			const newPlayerBubble = document.createElement("div");
+			newPlayerBubble.className = "player-bubble";
+			newPlayerBubble.textContent = playerName; // Display the username of the new player
+			this.activePlayersDiv.appendChild(newPlayerBubble);
+		}
 	}
 
 	sendMessage() {

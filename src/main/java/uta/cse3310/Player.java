@@ -13,6 +13,7 @@ public class Player {
     private int score;
     private int highScore;
     private String color;                //player's unique highlighting color; color attribute in another location
+    private boolean isInLobby;
 
 
     public Player(String id) {
@@ -20,6 +21,7 @@ public class Player {
         this.score = 0;
         this.highScore = 0;
         this.isReady = false;
+        this.isInLobby = false;
     }
     
     public void toggleReady() {
@@ -38,6 +40,11 @@ public class Player {
         this.score = score;
     }
 
+
+    public void setInLobby(boolean inLobby) {
+        isInLobby = inLobby;
+    }
+
     /* GETTERS */
 
     public String getId() {
@@ -50,6 +57,10 @@ public class Player {
 
     public int getScore() {
         return this.score;
+    }
+
+    public boolean isInLobby() {
+        return this.isInLobby;
     }
 
     public int getHighScore() {
