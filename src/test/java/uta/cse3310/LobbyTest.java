@@ -1,11 +1,12 @@
 package uta.cse3310;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import java.util.ArrayList;
-import uta.cse3310.Lobby;
 
 public class LobbyTest extends TestCase {
+    private Lobby lobby;
+
     public LobbyTest(String testName) {
         super(testName);
     }
@@ -14,37 +15,69 @@ public class LobbyTest extends TestCase {
         return new TestSuite(LobbyTest.class);
     }
 
-    public void testLobby() {
-        // Create lobby
-        Lobby lobby = new Lobby();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        lobby = new Lobby();
+    }
 
-        // Test adding players
-        // assertTrue(lobby.addPlayer("Player 1"));
-        // assertTrue(lobby.addPlayer("Player 2"));
-        // assertFalse(lobby.addPlayer("Player 3")); // Lobby is full
+    public void testAddAndRemovePlayer() {
+        Player player = new Player("John Doe");
+        assertEquals(0, lobby.getActivePlayers().size());
+        lobby.addPlayerToLobby(player);
+        assertTrue(lobby.getActivePlayers().contains(player));
+        assertEquals(1, lobby.getActivePlayers().size());
+        lobby.removePlayerFromLobby(player);
+        assertFalse(lobby.getActivePlayers().contains(player));
+        assertEquals(0, lobby.getActivePlayers().size());
+    }
 
-        // Test removing players
-        lobby.removePlayer("Player 1");
-        ArrayList<String> players = new ArrayList<>(lobby.getPlayers());
-        // assertFalse(players.contains("Player 1"));
-        // assertTrue(players.contains("Player 2"));
+    public void testCreateGame() {
+        GameEventListener listener = new GameEventListener() {
+            @Override
+            public void onGameEnded(Game game) {
+                System.out.println("Game ended.");
+            }
+        };
+        Game game = lobby.createGame("Test Game", 4, listener);
+        assertNotNull(game);
+        assertEquals("Test Game", game.getName());
+        assertEquals(4, game.getMaxPlayers());
+        assertTrue(lobby.getGames().contains(game));
+    }
 
-        // Test game started flag
-        // assertFalse(lobby.isGameStarted());
-        lobby.setGameStarted(true);
-        // assertTrue(lobby.isGameStarted());
+    public void testJoinGame() {
+        GameEventListener listener = new GameEventListener() {
+            @Override
+            public void onGameEnded(Game game) {
+                System.out.println("Game ended.");
+            }
+        };
+        Player player = new Player("John Doe");
+        Game game = lobby.createGame("Test Game", 1, listener); // Creating a game with 1 max player
+        boolean joined = lobby.joinGame(game.getId(), player);
+        assertTrue(joined);
+        assertTrue(game.getPlayers().contains(player));
 
-        // Additional tests can be added here if needed
+        // Test joining a full game
+        Player anotherPlayer = new Player("Jane Doe");
+        boolean joinedFullGame = lobby.joinGame(game.getId(), anotherPlayer);
+        assertFalse(joinedFullGame);
+    }
 
-        // Testing complete
-        System.out.println("----------------TESTING LOBBY----------------");
-        System.out.println("Players in the lobby after removal: ");
-        for (String player : players) {
-            System.out.println(player);
-        }
-        System.out.println("Is game started? " + lobby.isGameStarted());
-        System.out.println("----------------TESTING COMPLETE-----------------");
+    public void testRemoveGame() {
+        GameEventListener listener = new GameEventListener() {
+            @Override
+            public void onGameEnded(Game game) {
+                System.out.println("Game ended: " + game.getName());
+            }
+        };
+        Game game1 = lobby.createGame("Test Game 1", 4, listener);
+        Game game2 = lobby.createGame("Test Game 2", 4, listener);
+        assertEquals(2, lobby.getGames().size());
+        lobby.removeGame(game1.getId());
+        assertEquals(1, lobby.getGames().size());
+        assertFalse(lobby.getGames().contains(game1));
+        assertTrue(lobby.getGames().contains(game2));
     }
 }
-
-

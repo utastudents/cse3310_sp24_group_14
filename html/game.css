@@ -1,0 +1,196 @@
+#gamePage {
+    display: flex;
+    align-items: stretch;
+    height: 100%;  
+    width: 100%;   
+    gap: 10px;    
+    padding: 40px; 
+    overflow: hidden; 
+}
+
+.game-section {
+    background-color: rgb(241, 251, 253);
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.lobby-title {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px; 
+}
+
+
+
+.players-list {
+    flex: 2;  
+}
+
+.game-area {
+    flex: 6;  
+}
+
+.player-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #e8e8e8;
+    border-radius: 5px;
+}
+
+
+.player-slot {
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.pre-game-lobby {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.player-slots-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; 
+    padding: 10px;
+    margin: 0 20px; /* Horizontal margin */
+}
+
+.waiting-players-box {
+    width: 100%;
+    border: 2px solid #561d47;
+    padding: 40px;
+    margin-bottom: 20px; 
+    display: flex;
+    justify-content: space-evenly; 
+}
+
+.player-slot {
+    background-color: #ccc;
+    padding: 15px 30px; 
+    border-radius: 5px;
+    text-align: center;
+    margin: 5px; 
+    min-width: 100px; 
+    max-width: 200px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+
+#startGameButton {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    border-radius: 5px;
+    margin-top: 10px;
+    align-self: center; 
+}
+
+#startGameButton:not(:disabled) {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+
+
+/* Word Bank */
+.word-bank {
+    flex: 2;  /* Smaller section for word bank */
+    background-color: rgb(241, 251, 253);
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;  /* Space between words */
+}
+
+.word-bank ul {
+    display: flex;  /* Use flex to layout words */
+    flex-wrap: wrap;  /* Allow wrapping to next line */
+    padding: 0;
+    list-style: none;  /* Remove default list styling */
+    width: 100%;  /* Use full width of the container */
+    justify-content: space-around;  /* Space words evenly */
+}
+
+.word-bank li {
+    padding: 8px 16px;
+    margin: 5px;
+    background-color: #ccc;  /* Gray background for found words */
+    border-radius: 20px;  /* Rounded corners for word bubbles */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    flex-basis: calc(50% - 10px);  /* Calculate width to fit two per row accounting for margin */
+    text-align: center;
+    transition: background-color 0.3s;  /* Smooth transition for background color change */
+    color: #666;  /* Darker text color for contrast */
+
+}
+
+.word-bank li.found {
+    background-color: #4CAF50;  /* Green background for unfound words */
+    color: white;  /* White text color */
+
+}
+
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    border: 2px solid rgb(133, 133, 133);
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    gap: 2px; /* Added gap between grid cells */
+    background-color: #f0f0f0; /* Added background color for the grid */
+    padding: 5px; /* Added padding to visually separate border from cells */
+}
+
+.grid-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    background-color: #ffffff; /* Changed cell background color */
+    color: #333333; /* Adjusted text color for better contrast */
+    font-size: 1.5rem;
+    user-select: none;
+    cursor: pointer;
+    background-clip: padding-box;
+    border: 1px solid #cccccc; /* Softened border color */
+    width: 32px;
+    height: 32px;
+}
+
+
+.grid-cell:hover {
+    opacity: 0.6;
+}
+
+.grid-row {
+    display: flex;
+}
+
+
+
+.grid-cell:hover {
+    background-color: #e1e1e1;  /* Highlight cell on hover */
+}

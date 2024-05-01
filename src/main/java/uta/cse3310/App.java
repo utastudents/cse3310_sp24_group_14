@@ -1,5 +1,6 @@
 package uta.cse3310;
 
+import java.awt.Point;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,9 +23,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonParseException;
 
-public class App extends WebSocketServer {
+public class App extends WebSocketServer implements GameEventListener {
 
     private HttpServer httpServer; // Assuming you have a HttpServer class that needs to be managed
     public Lobby lobby = new Lobby();
@@ -33,6 +35,19 @@ public class App extends WebSocketServer {
     public App(int port, HttpServer httpServer) {
         super(new InetSocketAddress(port));
         this.httpServer = httpServer;
+    }
+
+    @Override
+    public void onGameEnded(Game game) {
+
+        for (Player player : game.getPlayers()) {
+            WebSocket playerConn = findConnectionByPlayer(player);
+            player.setInGame(false);
+            lobby.getLeaderboard().updateScore(player);
+            lobby.removeGame(game.getId());
+            sendLobbyInfo(playerConn, player.getUsername());
+        }
+
     }
 
     @Override
@@ -68,7 +83,6 @@ public class App extends WebSocketServer {
 
         String action = messageObject.get("action").getAsString();
 
-        JsonObject response = new JsonObject();
         switch (action) {
             case "enterLobby":
                 handleEnterLobby(conn, messageObject);
@@ -76,9 +90,176 @@ public class App extends WebSocketServer {
             case "sendMessage":
                 handleSendMessage(conn, messageObject);
                 break;
-
+            case "createGame":
+                handleCreateGame(conn, messageObject);
+                break;
+            case "joinGame":
+                handleJoinGame(conn, messageObject);
+                break;
+            case "startGame":
+                handleStartGame(conn, messageObject);
+                break;
+            case "checkWord":
+                handleCheckWord(conn, messageObject);
         }
 
+    }
+
+    private void handleCheckWord(WebSocket conn, JsonObject messageObject) {
+        String gameId = messageObject.get("gameId").getAsString();
+        Game game = lobby.findGameById(gameId);
+        if (game == null) {
+            return; // Game not found, handle error appropriately
+        }
+
+        String username = messageObject.get("username").getAsString();
+        Player player = lobby.findPlayerByUsername(username);
+        Point start = new Point(messageObject.get("start").getAsJsonObject().get("row").getAsInt(),
+                messageObject.get("start").getAsJsonObject().get("col").getAsInt());
+        Point end = new Point(messageObject.get("end").getAsJsonObject().get("row").getAsInt(),
+                messageObject.get("end").getAsJsonObject().get("col").getAsInt());
+
+        WordGrid grid = game.getWordGrid();
+        if (grid.isWordValid(start, end)) {
+            grid.markWordFound(start, end, player.getColor());
+            player.incrementScore();
+            broadcastUpdateGame(game); // Broadcast updated game state to all clients
+        }
+    }
+
+    private void handleStartGame(WebSocket conn, JsonObject messageObject) {
+        String gameId = messageObject.get("gameId").getAsString();
+        Game game = lobby.findGameById(gameId);
+
+        if (game != null) {
+            game.startGame();
+            broadcastUpdateGame(game);
+        } else {
+            System.err.println("Game with ID " + gameId + " not found.");
+        }
+    }
+
+    private void broadcastUpdateGame(Game game) {
+        Gson gson = new Gson();
+        JsonObject gameUpdateInfo = new JsonObject();
+        gameUpdateInfo.addProperty("action", "updateGame");
+        gameUpdateInfo.addProperty("gameId", game.getId());
+
+        JsonArray playersInfo = new JsonArray();
+        for (Player player : game.getPlayers()) {
+            JsonObject playerInfo = new JsonObject();
+            player.setInGame(true);
+            playerInfo.addProperty("username", player.getUsername());
+            playerInfo.addProperty("score", player.getScore());
+            playerInfo.addProperty("color", player.getColor()); // Initial score, assuming 0 at start
+            playersInfo.add(playerInfo);
+        }
+        gameUpdateInfo.add("players", playersInfo);
+
+        // Grid data including colors
+        JsonArray gridData = new JsonArray();
+        WordGrid wordGrid = game.getWordGrid(); // Assuming you have a method getGrid()
+        for (Cell[] row : wordGrid.getGrid()) {
+            JsonArray gridRow = new JsonArray();
+            for (Cell cell : row) {
+                JsonObject cellObject = new JsonObject();
+                cellObject.addProperty("letter", cell.getLetter());
+                cellObject.addProperty("color", cell.getColor()); // Assuming Cell has getColor()
+                gridRow.add(cellObject);
+            }
+            gridData.add(gridRow);
+        }
+        gameUpdateInfo.add("gridData", gridData);
+
+        // Add word bank
+        JsonArray wordBank = new JsonArray();
+        for (Word word : wordGrid.getWords()) {
+            JsonObject wordObject = new JsonObject();
+            wordObject.addProperty("text", word.getText());
+            wordObject.addProperty("found", word.isFound());
+            wordBank.add(wordObject);
+        }
+        gameUpdateInfo.add("wordBank", wordBank);
+
+        String messageStr = gson.toJson(gameUpdateInfo);
+        // Broadcast to all players in the game
+        game.getPlayers().forEach(player -> {
+            WebSocket playerConn = findConnectionByPlayer(player);
+            if (playerConn != null && playerConn.isOpen()) {
+                playerConn.send(messageStr);
+            }
+        });
+    }
+
+    private WebSocket findConnectionByPlayer(Player player) {
+        return activeConnections.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(player))
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void handleJoinGame(WebSocket conn, JsonObject messageObject) {
+        String gameId = messageObject.get("gameId").getAsString();
+        String username = messageObject.get("username").getAsString();
+        Game game = lobby.findGameById(gameId);
+        Player player = getPlayerByUsername(username);
+
+        if (game != null && player != null) {
+            game.addPlayer(player);
+            broadcastUpdatePregame(game);
+        }
+    }
+
+    private void broadcastUpdatePregame(Game game) {
+        Gson gson = new Gson();
+        JsonObject updateMessage = new JsonObject();
+        updateMessage.addProperty("action", "updatePregame");
+        updateMessage.addProperty("gameId", game.getId());
+        updateMessage.addProperty("numPlayers", game.getPlayers().size());
+        updateMessage.addProperty("roomSize", game.getMaxPlayers());
+
+        JsonArray playersJson = new JsonArray();
+        for (Player player : game.getPlayers()) {
+            JsonObject playerInfo = new JsonObject();
+            playerInfo.addProperty("username", player.getUsername());
+            playersJson.add(playerInfo);
+        }
+        updateMessage.add("players", playersJson);
+
+        String messageStr = gson.toJson(updateMessage);
+        // Iterate over all active connections and send to those who are part of the
+        // game
+        activeConnections.forEach((socket, player) -> {
+            if (game.getPlayers().contains(player) && socket.isOpen()) {
+                socket.send(messageStr);
+            }
+        });
+    }
+
+    private void handleCreateGame(WebSocket conn, JsonObject messageObject) {
+        String roomName = messageObject.get("roomName").getAsString();
+        int roomSize = messageObject.get("roomSize").getAsInt();
+        lobby.createGame(roomName, roomSize, this);
+        broadcastGamesList();
+    }
+
+    private void broadcastGamesList() {
+        Gson gson = new Gson();
+        JsonArray gamesInfo = new JsonArray();
+        for (Game game : lobby.getGames()) {
+            JsonObject gameInfo = new JsonObject();
+            gameInfo.addProperty("gameId", game.getId());
+            gameInfo.addProperty("gameName", game.getName());
+            gameInfo.addProperty("numPlayers", game.getPlayers().size());
+            gameInfo.addProperty("maxPlayers", game.getMaxPlayers());
+            gamesInfo.add(gameInfo);
+        }
+
+        JsonObject message = new JsonObject();
+        message.addProperty("action", "updateGamesList");
+        message.add("games", gamesInfo);
+        broadcast(gson.toJson(message)); // Broadcast the entire list of games
     }
 
     private void broadcastPlayerLeft(Player player) {
@@ -92,8 +273,10 @@ public class App extends WebSocketServer {
     private void handleEnterLobby(WebSocket conn, JsonObject messageObject) {
         String username = messageObject.get("username").getAsString();
         Player player = activeConnections.get(conn);
-        if (player != null) {
+        Player existingPlayer = lobby.findPlayerByUsername(username);
+        if (player != null && existingPlayer == null) {
             player.setUsername(username);
+            lobby.getLeaderboard().updateScore(player);
             lobby.addPlayerToLobby(player); // Add player to active lobby list
             sendLobbyInfo(conn, player.getUsername());
             broadcastPlayerJoined(player); // Notify all players about the new player
@@ -157,7 +340,6 @@ public class App extends WebSocketServer {
             gameInfo.addProperty("gameName", game.getName());
             gameInfo.addProperty("numPlayers", game.getPlayers().size());
             gameInfo.addProperty("maxPlayers", game.getMaxPlayers());
-            gameInfo.addProperty("status", game.getGameStatus().toString());
             gamesInfo.add(gameInfo);
         }
         response.add("games", gamesInfo);
