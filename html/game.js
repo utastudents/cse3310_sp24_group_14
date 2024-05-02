@@ -9,6 +9,9 @@ class Game {
 		this.playersList = document.querySelector(".players-list");
 		this.preGameLobby = this.gamePageDiv.querySelector(".pre-game-lobby");
 		this.selectedCells = [];
+		this.timerDisplay = document.getElementById("timerDisplay");
+        this.timer = null;
+        this.gameDuration = 180; 
 
 		// Event listeners for game actions
 		this.startButton.addEventListener("click", () => this.startGameClicked());
@@ -20,7 +23,42 @@ class Game {
 			gameId: this.gameId,
 		};
 		this.app.websocket.send(JSON.stringify(startGameMessage));
+		this.startTimer(this.gameDuration);
+
 	}
+
+	startTimer(duration) {
+        let timer = duration, minutes, seconds;
+        this.timer = setInterval(() => {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            this.timerDisplay.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(this.timer);
+                this.timerEnded();
+            }
+        }, 1000);
+    }
+
+    timerEnded() {
+        console.log("Timer ended. Game over.");
+        this.endGame();
+        const timeUpMessage = {
+            action: "timeUp",
+            gameId: this.gameId
+        };
+        this.app.websocket.send(JSON.stringify(timeUpMessage));
+    }
+
+    endGame() {
+        console.log("End the game on the client side.");
+        clearInterval(this.timer); // Make sure the timer stops when the game ends
+    }
 
 	updateGamePage(data) {
 		this.gameGrid.classList.remove("hidden");

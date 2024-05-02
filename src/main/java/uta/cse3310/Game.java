@@ -100,6 +100,8 @@ public class Game {
     private void endGame() {
         this.gameActive = false;
         this.listener.onGameEnded(this);
+        System.out.println("Game ended: " + name);
+
         timer.shutdown();
     }
 
@@ -107,5 +109,6 @@ public class Game {
         this.gameActive = true;
         timer = Executors.newSingleThreadScheduledExecutor();
         timer.schedule(this::endGame, gameDuration, TimeUnit.SECONDS);
+        System.out.println("Game started: " + name + ". It will end in " + gameDuration + " seconds.");
     }
 }
