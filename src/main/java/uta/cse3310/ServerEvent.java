@@ -5,5 +5,6 @@ public class ServerEvent {
     int GameId;
     int ClientId;
     String ServerEvent;
-    
+    String Version = "no version";
+
 }

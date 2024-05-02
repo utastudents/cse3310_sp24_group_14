@@ -28,7 +28,7 @@ class Home {
 		if (username) {
 			this.app.updateSession({ username: username }); // Update the user session with the username
 			this.sendConnectionMessage(username); // Send a message to the server indicating a new connection
-			this.app.enterLobby({ username: username }); // Transition to the lobby
+			// this.app.enterLobby({ username: username }); // Transition to the lobby
 		} else {
 			alert("Please enter a username.");
 		}

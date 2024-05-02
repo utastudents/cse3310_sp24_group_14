@@ -20,14 +20,14 @@ public class Lobby {
         this.activePlayers = new HashSet<>();
     }
 
-    public Game createGame(String name, int maxPlayers) {
-        Optional<Game> existingGame = findGameByName(name);
-        if (existingGame.isPresent()) {
-            throw new IllegalArgumentException("Game with name " + name + " already exists.");
-        }
-        Game newGame = new Game(name, maxPlayers);
+    public Game createGame(String name, int maxPlayers, GameEventListener listener) {
+        Game newGame = new Game(name, maxPlayers, listener);
         games.add(newGame);
         return newGame;
+    }
+
+    public boolean removeGame(String gameId) {
+        return games.removeIf(game -> game.getId().equals(gameId));
     }
 
     public void addPlayerToLobby(Player player) {
@@ -44,10 +44,10 @@ public class Lobby {
         return activePlayers;
     }
 
-    public boolean joinGame(String name, Player player) {
-        Optional<Game> game = findGameByName(name);
-        if (game.isPresent() && !game.get().isFull()) {
-            game.get().addPlayer(player);
+    public boolean joinGame(String id, Player player) {
+        Game game = findGameById(id);
+        if (game != null && !game.isFull()) {
+            game.addPlayer(player);
             return true;
         }
         return false;
@@ -61,10 +61,31 @@ public class Lobby {
         return this.globalChatroom;
     }
 
-    private Optional<Game> findGameByName(String name) {
-        return games.stream()
-                .filter(game -> game.getName().equals(name))
-                .findFirst();
+    public Player findPlayerByUsername(String username) {
+        for (Player player : activePlayers) {
+            if (player.getUsername().equals(username)) {
+                return player;
+            }
+        }
+        return null; 
+    }
+
+    private Game findGameByName(String name) {
+        for (Game game : games) {
+            if (game.getName().equals(name)) {
+                return game;
+            }
+        }
+        return null; // Return null if no game is found with the given name
+    }
+
+    public Game findGameById(String id) {
+        for (Game game : games) {
+            if (game.getId().equals(id)) {
+                return game;
+            }
+        }
+        return null; // Return null if no game is found with the given name
     }
 
     public Leaderboard getLeaderboard() {

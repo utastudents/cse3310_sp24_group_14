@@ -9,6 +9,8 @@ class App {
 		};
 		this.homePageDiv = document.getElementById("homePage");
 		this.lobbyPageDiv = document.getElementById("lobbyPage");
+		this.gamePageDiv = document.getElementById("gamePage");
+		this.game = null; 
 		this.setupWebSocket();
 	}
 
@@ -40,6 +42,7 @@ class App {
 				break;
 			case "updateChat":
 				this.updateChat(data);
+				break;
 			case "playerJoined":
 				if (data.username != this.userSession.username) {
 					this.lobby.updateActivePlayersDisplay([{ username: data.username }]);
@@ -48,7 +51,27 @@ class App {
 			case "playerLeft":
 				this.lobby.removeActivePlayer(data.username);
 				break;
+			case "updateGamesList":
+				this.lobby.updateGamesDisplay(data.games);
+				break;
+			case "newGameCreated":
+				this.initializeGame(data);
+				break;
+			case "updatePregame":
+				this.updatePregame(data);
+				break;
+			case "updateGame":
+				this.game.updateGamePage(data);
 		}
+	}
+
+	updatePregame(data) {
+		if (this.game === null) {
+			this.game = new Game(this); 
+		}
+		this.gamePageDiv.classList.remove("hidden");
+		this.lobbyPageDiv.classList.add("hidden");
+		this.game.setupPregame(data);
 	}
 
 	enterHome() {
@@ -58,21 +81,28 @@ class App {
 	}
 
 	enterLobby(data) {
-		this.lobby = new Lobby(this);
+		this.gamePageDiv.classList.add("hidden");
+		this.lobbyPageDiv.classList.remove("hidden");
+		document.querySelector(".players-list").classList.add("hidden");
+		document.querySelector(".word-bank").classList.add("hidden");
+
+		if (this.lobby == null) {
+			this.lobby = new Lobby(this);
+		}
 		this.userSession.username = data.username;
 		if (data) {
-			// if (data.games) {
-			// 	this.lobby.updateLobbyDisplay(data.games);
-			// }
+			if (data.games) {
+				this.lobby.updateGamesDisplay(data.games);
+			}
 			if (data.chatMessages) {
 				this.lobby.updateChatDisplay(data.chatMessages);
 			}
 			if (data.activePlayers) {
 				this.lobby.updateActivePlayersDisplay(data.activePlayers);
 			}
-			// if (data.leaderboard) {
-			// 	this.lobby.updateLeaderboardDisplay(data.leaderboard);
-			// }
+			if (data.leaderboard) {
+				this.lobby.updateLeaderboardDisplay(data.leaderboard);
+			}
 		}
 	}
 
@@ -109,5 +139,5 @@ class App {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	const app = new App(); // Initializes and starts everything
+	const app = new App(); 
 });

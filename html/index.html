@@ -9,14 +9,20 @@
 			rel="stylesheet"
 		/>
 		<link rel="stylesheet" href="styles.css" />
+		<link rel="stylesheet" href="game.css" />
+
 		<!-- Path to your CSS file -->
 	</head>
 
 	<!-- div stuff goes here (content that will actually get displayed) -->
 
 	<body id="mainContent" style="display: none">
-		<div id="homepage">
+		<div class="" id="homepage">
 			<h1>TheWordSearchGame</h1>
+
+			<title>
+				<div id = "Version"></div>
+			</title>
 
 			<div id="wordGrid"></div>
 
@@ -31,18 +37,7 @@
 		<div class="hidden" id="lobbyPage">
 			<div class="leaderboard-container" id="leaderboardStats">
 				<h2>TWSG Leaderboard</h2>
-				<div class="leaderboard-header">
-					<p class="leaderboard-header-player">Player</p>
-					<p class="leaderboard-header-score">Score</p>
-				</div>
-				<div class="leaderboard-content">
-					<p class="leaderboard-player">manish</p>
-					<p class="leaderboard-score">23</p>
-				</div>
-				<div class="leaderboard-content">
-					<p class="leaderboard-player">digs</p>
-					<p class="leaderboard-score">33</p>
-				</div>
+				<div class="leaderboard-list"></div>
 			</div>
 			<div class="games-container" id="lobbyContent">
 				<h2>TheWordSearchGame Lobby</h2>
@@ -65,29 +60,12 @@
 				<!-- List of Games -->
 				<div class="games-list">
 					<h3>Available Games</h3>
-					<div class="game-entry">
-						<span>Game One - 2/4</span>
-						<button onclick="joinGame('Game One')">Join</button>
-					</div>
-					<div class="game-entry">
-						<span>Game Two - 3/5</span>
-						<button onclick="joinGame('Game Two')">Join</button>
-					</div>
 				</div>
 			</div>
 
 			<div class="chat-container" id="chatBox">
 				<h2>Global Chat</h2>
-				<div class="messagesContainer">
-					<div class="messageBubble">
-						<div class="sender">manish</div>
-						<div class="message">whats up guys</div>
-					</div>
-					<div class="messageBubble">
-						<div class="sender">diganta</div>
-						<div class="message">not much</div>
-					</div>
-				</div>
+				<div class="messagesContainer"></div>
 				<div class="messageInputContainer">
 					<textarea
 						class="messageTextbox"
@@ -101,26 +79,79 @@
 		</div>
 
 		<div class="hidden" id="gamePage">
-			<div class="game-content">
-				<h1>HappySearching!</h1>
-				<button class="back-button" type="button" onclick="quitGame()">
-					Quit Game
-				</button>
-
-				<div class="grid" id="wordGrid"></div>
-				<div id="bank-container" id="wordBank">
-					<h2>Word Bank:</h2>
+			<!-- Left Box: Player List and Scores -->
+			<div class="game-section players-list hidden">
+				<h2>Players</h2>
+				<div class="player-entry">
+					<span>Alice</span>
+					<span class="score">120</span>
 				</div>
-				<div class="leaderboard-container" id="leaderboardStats">
-					<h2>TWSG Leaderboard</h2>
+				<div class="player-entry">
+					<span>Bob</span>
+					<span class="score">150</span>
 				</div>
 			</div>
-		</div>
 
+			<!-- Middle Box: Game Preparation and Game Grid -->
+			<div class="game-section game-area">
+				<div class="pre-game-lobby">
+					<h2 class="lobby-title">Waiting for players to join</h2>
+					<div class="player-slots-container">
+						<div class="waiting-players-box"></div>
+						<button id="startGameButton" disabled>Start Game</button>
+					</div>
+				</div>
+				<div id="gameGrid" class="game-grid hidden"></div>
+			</div>
+
+			<!-- Right Box: Word Bank -->
+			<div class="game-section word-bank hidden">
+				<h2>Word Bank</h2>
+				<ul class="word-bank-list">
+					<li class="found">Example</li>
+					<li>Word</li>
+					<li>Iphone</li>
+					<li>Word</li>
+					<li>Word</li>
+					<li>Word</li>
+					<!-- Additional words -->
+				</ul>
+			</div>
+		</div>
+		
+		<script>
+			var ClientId; // This is an ID from the server, value of 1 to N.  It is unique to this client
+			var playerIdx = "nick";
+			var gameId = -1;
+			var GameSession;
+			var Version;
+			class UserEvent {
+				// Button = -1;
+				playerIdx = "nick";
+				gameId = 0;
+			}
+			connection.onmessage = function (evt) {
+            var msg = evt.data;
+            console.log("Message received: " + msg);
+            const obj = JSON.parse(msg);
+
+            // Only a couple of different messages can arrive here.
+            // let's make a block of code to handle each of them.
+
+            // Placing the name of the class in the class is a hack,
+            // but it makes this code more deliberate
+            if ('ServerEvent' in obj) {
+                ClientId = obj.ClientId;
+                // gameId may not have a valid value at this time...
+                gameId = obj.ClientId;
+                Version = obj.Version;
+                document.getElementById("Version").innerHTML = "Version: " + Version;                
+            }
+        }
+		</script>
 		<script src="App.js"></script>
 		<script src="home.js"></script>
 		<script src="lobby.js"></script>
-		<!-- <script src="ready.js"></script> -->
-		<!-- <script src="game.js"></script> -->
+		<script src="game.js"></script>
 	</body>
 </html>

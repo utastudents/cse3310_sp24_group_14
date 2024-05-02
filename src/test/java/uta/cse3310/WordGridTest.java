@@ -1,57 +1,27 @@
-//Last modified: 4/14/24 by Anthony Timberman
 package uta.cse3310;
-import java.util.ArrayList;
 
-import junit.framework.Test;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.awt.Point;
+import java.util.Arrays;
+import java.util.List;
 
+public class WordGridTest extends TestCase {
+    private WordGrid wordGrid;
+    private List<Word> sampleWords;
 
-public class WordGridTest extends TestCase{
-    public WordGridTest(String testName) {
-        super(testName);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        // Initialize with some sample words
+        sampleWords = Arrays.asList(new Word("HELLO"), new Word("WORLD"), new Word("JAVA"));
+        wordGrid = new WordGrid(sampleWords);
     }
 
-    public static Test suite(){
-        return new TestSuite(WordGridTest.class);
+    public void testGridInitialization() {
+        assertNotNull("Grid should be initialized", wordGrid.getGrid());
+        // Ensure that the grid size is as expected
+        assertEquals("Grid size should be 20x20", 20, wordGrid.getGrid().length);
+        assertEquals("Grid size should be 20x20", 20, wordGrid.getGrid()[0].length);
     }
 
-    public void testPosition(){
-        // testing position functions to see if data is properly going from point A to point B
-
-        ArrayList<String> words = new ArrayList<String>(){
-             {
-                 add("cat");
-                 add("bat");
-                 add("rat");
-                 add("tnt");
-                 add("sad");
-                 add("go");
-                 add("rad");
-                 add("mad");
-                 add("fad");
-                 add("run");
-                 add("dun");
-             }
-         };
-        Position start = new Position(2, 3);
-        Position end = new Position(5, 6);
-        String word = "cat";
-        WordGrid wg = new WordGrid(6, words);
-
-        // printing for demonstration
-        System.out.println("----------------TESTING WORDGRID----------------"); // changed this from 'messaging' to wordgrid to remove confusion
-        wg.placeWords();
-        wg.generateGrid();
-
-        System.out.println(wg.checkWordSelection(start, end));
-
-        wg.getWord(start,end);
-        // wg.highlightWord(word);
-        System.out.println("T/F 'cat' is in the grid\n");
-         System.out.println(wg.isWordPlaced(word)+"\n");
-        System.out.println("----------------TESTING COMPLETE-----------------");
-
-        //messaging testing ends here
-    }
 }
