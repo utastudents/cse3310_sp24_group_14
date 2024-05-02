@@ -20,7 +20,11 @@ public class Game {
     private boolean gameActive;
     private WordGrid wordGrid;
     private ScheduledExecutorService timer;
+<<<<<<< HEAD
     private int gameDuration = 240; // testing this mechanic - Uriel
+=======
+    private int gameDuration = 120;
+>>>>>>> abf4267d9229bcc8ce14c4396ec4623e437071a0
     private GameEventListener listener;
 
     public Game(String name, int maxPlayers, GameEventListener listener) {
