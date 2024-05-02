@@ -44,6 +44,17 @@ public class HttpServer {
                     return 0;
                 }
             });
+
+            // Add new context to serve the VERSION environment variable
+            host.addContext("/api/version", new ContextHandler() {
+                public int serve(Request req, Response resp) throws IOException {
+                    String version = System.getenv("VERSION");
+                    resp.getHeaders().add("Content-Type", "text/plain");
+                    resp.send(200, version != null ? version : "Version not set");
+                    return 0;
+                }
+            });
+            
             server.start();
         } catch (Exception e) {
             System.err.println("error: " + e);

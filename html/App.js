@@ -138,6 +138,17 @@ class App {
 	}
 }
 
+function fetchVersionAndUpdateTitle() {
+	fetch('/api/version')
+	  .then(response => response.text())
+	  .then(version => {
+		  document.title = `${version}`;  
+	  })
+	  .catch(error => console.error('Failed to fetch version:', error));
+  }
+  
+
 document.addEventListener("DOMContentLoaded", () => {
 	const app = new App(); 
+	fetchVersionAndUpdateTitle();
 });
