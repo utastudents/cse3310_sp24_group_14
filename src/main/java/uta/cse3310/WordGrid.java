@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 public class WordGrid {
-    private static final int SIZE = 20; // Grid size
+    private static final int SIZE = 20;
     private Cell[][] grid;
     private Random random = new Random();
     private ArrayList<Word> words;
