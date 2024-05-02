@@ -26,24 +26,19 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonParseException;
 
-<<<<<<< HEAD
 // adding this for the GitHub hash - Uriel
 import java.lang.Runtime.Version;
 
 
-=======
->>>>>>> abf4267d9229bcc8ce14c4396ec4623e437071a0
+
 public class App extends WebSocketServer implements GameEventListener {
 
     private HttpServer httpServer; // Assuming you have a HttpServer class that needs to be managed
     public Lobby lobby = new Lobby();
     public Map<WebSocket, Player> activeConnections = new HashMap<WebSocket, Player>();
-<<<<<<< HEAD
     String Version;
     private int GameId = 1;
     private int ClientId = 0; // This is a global client ID, starts at 1
-=======
->>>>>>> abf4267d9229bcc8ce14c4396ec4623e437071a0
 
     public App(int port, HttpServer httpServer) {
         super(new InetSocketAddress(port));
@@ -65,7 +60,6 @@ public class App extends WebSocketServer implements GameEventListener {
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-<<<<<<< HEAD
         Version = System.getenv("VERSION"); // tony's github hash VERSION - Uriel
         if (Version ==null){
             Version = "no version";
@@ -84,12 +78,8 @@ public class App extends WebSocketServer implements GameEventListener {
         Gson gson = new Gson();
         String jsonString = gson.toJson(E);
         conn.send(jsonString);
-
-
-=======
         System.out.println(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " connected");
         handleNewConnection(conn);
->>>>>>> abf4267d9229bcc8ce14c4396ec4623e437071a0
     }
 
     public void handleNewConnection(WebSocket conn) {
@@ -434,16 +424,10 @@ public class App extends WebSocketServer implements GameEventListener {
     }
 
     public static void main(String[] args) throws Exception {
-<<<<<<< HEAD
         int httpPort = System.getenv("HTTP_PORT") != null ? Integer.parseInt(System.getenv("HTTP_PORT")) : 9014; // our team's port
         int websocketPort = System.getenv("WEBSOCKET_PORT") != null ? Integer.parseInt(System.getenv("WEBSOCKET_PORT"))
                 : 9114;
-=======
-        int httpPort = System.getenv("HTTP_PORT") != null ? Integer.parseInt(System.getenv("HTTP_PORT")) : 9002;
-        int websocketPort = System.getenv("WEBSOCKET_PORT") != null ? Integer.parseInt(System.getenv("WEBSOCKET_PORT"))
-                : 9102;
->>>>>>> abf4267d9229bcc8ce14c4396ec4623e437071a0
-
+                
         HttpServer httpServer = new HttpServer(httpPort, "./html");
         App websocketApp = new App(websocketPort, httpServer);
 
